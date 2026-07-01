@@ -1468,20 +1468,10 @@ void enrollRFID() {
 
 uint8_t waitForFingerState(uint8_t targetState, unsigned long timeoutMs) {
   unsigned long start = millis();
-  unsigned long lastPrint = 0;
-  uint8_t p = 0;
+  uint8_t p = -1;
   while (millis() - start < timeoutMs) {
-    if (currentMode != "enroll_fingerprint") return 254; // ABORT immediately!
     p = finger.getImage();
-    
-    if (millis() - lastPrint > 1000) {
-      Serial.print("Waiting for finger removal... Sensor returned: 0x");
-      Serial.println(p, HEX);
-      lastPrint = millis();
-    }
-    
     if (p == targetState) return p;
-    vTaskDelay(50 / portTICK_PERIOD_MS);
   }
   return 255;
 }
@@ -1505,7 +1495,6 @@ void enrollFingerprint() {
   }
   
   uint8_t p = -1;
-  uint8_t state = -1;
 
 retry_first_scan:
   // Step 1: Scan First Image
@@ -1518,7 +1507,6 @@ retry_first_scan:
     unsigned long start = millis();
     bool success = false;
     while (millis() - start < 15000) {
-      if (currentMode != "enroll_fingerprint") return; // ABORT immediately!
       if (finger.getImage() == FINGERPRINT_OK) {
         if (finger.image2Tz(1) == FINGERPRINT_OK) {
           success = true;
@@ -1526,7 +1514,6 @@ retry_first_scan:
         }
         // If image2Tz fails, it was a false positive. Ignore silently and keep trying.
       }
-      vTaskDelay(50 / portTICK_PERIOD_MS); // Yield to other tasks
     }
     if (!success) goto timeout;
   }
@@ -1537,9 +1524,7 @@ retry_first_scan:
   tft.setTextColor(ILI9341_YELLOW);
   tft.println("Remove finger...");
   
-  // HARDWARE BYPASS: The sensor is stuck reading 0x0 even when finger is removed.
-  // Instead of freezing in waitForFingerState, we just delay 2 seconds to give them time to lift it.
-  delay(2000);
+  if (waitForFingerState(FINGERPRINT_NOFINGER, 15000) != FINGERPRINT_NOFINGER) goto timeout;
   
 retry_second_scan:
   // Step 3: Scan Second Image
@@ -1552,14 +1537,12 @@ retry_second_scan:
     unsigned long start = millis();
     bool success = false;
     while (millis() - start < 15000) {
-      if (currentMode != "enroll_fingerprint") return; // ABORT immediately!
       if (finger.getImage() == FINGERPRINT_OK) {
         if (finger.image2Tz(2) == FINGERPRINT_OK) {
           success = true;
           break;
         }
       }
-      vTaskDelay(50 / portTICK_PERIOD_MS); // Yield to other tasks
     }
     if (!success) goto timeout;
   }
@@ -1573,6 +1556,7 @@ retry_second_scan:
     tft.println("Fingers didn't match!");
     tft.println("Restarting...");
     delay(2000);
+    waitForFingerState(FINGERPRINT_NOFINGER, 5000);
     goto retry_first_scan;
   } else if (p != FINGERPRINT_OK) {
     goto timeout;
@@ -1586,11 +1570,6 @@ retry_second_scan:
   return;
 
 timeout:
-  tft.fillRect(0, 100, 320, 140, ILI9341_BLACK);
-  tft.setCursor(10, 110);
-  tft.setTextColor(ILI9341_RED);
-  tft.println("Timeout! Try again.");
-  delay(2000);
   currentMode = "attendance";
   resetServer();
   resetScreen();
