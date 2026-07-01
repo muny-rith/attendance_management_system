@@ -31,6 +31,7 @@ const int   daylightOffset_sec = 0;
 #define ICONS_H
 
 WiFiClientSecure globalSecureClient;
+SemaphoreHandle_t wifiMutex;
 
 #include <pgmspace.h>
 
@@ -1001,6 +1002,7 @@ void syncTimeFromNTP() {
 }
 
 void setup() {
+  wifiMutex = xSemaphoreCreateMutex();
   globalSecureClient.setInsecure();
   Serial.begin(115200);
   Serial.println("\n--- ATTENDANCE SYSTEM BOOT ---");
@@ -1421,13 +1423,16 @@ void checkRFID() {
 // Polling logic moved to Core 0
 
 void resetServer() {
-  HTTPClient http;
-  http.begin(globalSecureClient, String(hardwareUrl) + "/reset");
-  http.addHeader("Connection", "close");
-  http.addHeader("x-api-key", API_KEY);
-  http.POST("");
-  http.end();
-  globalSecureClient.stop();
+  if (xSemaphoreTake(wifiMutex, portMAX_DELAY) == pdTRUE) {
+    HTTPClient http;
+    http.begin(globalSecureClient, String(hardwareUrl) + "/reset");
+    http.addHeader("Connection", "close");
+    http.addHeader("x-api-key", API_KEY);
+    http.POST("");
+    http.end();
+    globalSecureClient.stop();
+    xSemaphoreGive(wifiMutex);
+  }
 }
 
 void postEnrollResult(String identifier) {
@@ -1440,17 +1445,20 @@ void postEnrollResult(String identifier) {
   tft.setTextColor(ILI9341_WHITE);
   tft.println("Sent to server...");
   
-  HTTPClient http;
-  String url = String(hardwareUrl) + "/enroll_result";
-  http.begin(globalSecureClient, url);
-  http.addHeader("Connection", "close");
-  http.addHeader("x-api-key", API_KEY);
-  http.addHeader("Content-Type", "application/json");
-  
-  String payload = "{\"identifier\":\"" + identifier + "\"}";
-  http.POST(payload);
-  http.end();
-  globalSecureClient.stop();
+  if (xSemaphoreTake(wifiMutex, portMAX_DELAY) == pdTRUE) {
+    HTTPClient http;
+    String url = String(hardwareUrl) + "/enroll_result";
+    http.begin(globalSecureClient, url);
+    http.addHeader("Connection", "close");
+    http.addHeader("x-api-key", API_KEY);
+    http.addHeader("Content-Type", "application/json");
+    
+    String payload = "{\"identifier\":\"" + identifier + "\"}";
+    http.POST(payload);
+    http.end();
+    globalSecureClient.stop();
+    xSemaphoreGive(wifiMutex);
+  }
   
   currentMode = 0;
   resetScreen();
@@ -1588,47 +1596,50 @@ timeout:
 
 void syncFingerprints() {
   Serial.println("--- Starting Fingerprint Sync ---");
-  HTTPClient http;
-  http.begin(globalSecureClient, syncUrl);
-  http.addHeader("Connection", "close");
-  http.addHeader("x-api-key", API_KEY);
-  
-  int httpCode = http.GET();
-  if (httpCode == 200) {
-    String payload = http.getString();
-    Serial.println("Sync Payload: " + payload);
+  if (xSemaphoreTake(wifiMutex, portMAX_DELAY) == pdTRUE) {
+    HTTPClient http;
+    http.begin(globalSecureClient, syncUrl);
+    http.addHeader("Connection", "close");
+    http.addHeader("x-api-key", API_KEY);
     
-    JsonDocument doc;
-    DeserializationError error = deserializeJson(doc, payload);
-    if (!error) {
-      JsonArray serverIds = doc.as<JsonArray>();
+    int httpCode = http.GET();
+    if (httpCode == 200) {
+      String payload = http.getString();
+      Serial.println("Sync Payload: " + payload);
       
-      // Loop through all 127 slots in the fingerprint sensor
-      for (int i = 1; i <= 127; i++) {
-        uint8_t p = finger.loadModel(i);
-        if (p == FINGERPRINT_OK) {
-          // Template exists at this slot! Check if it's in the server array
-          bool found = false;
-          for (JsonVariant v : serverIds) {
-            if (v.as<int>() == i) {
-              found = true;
-              break;
+      JsonDocument doc;
+      DeserializationError error = deserializeJson(doc, payload);
+      if (!error) {
+        JsonArray serverIds = doc.as<JsonArray>();
+        
+        // Loop through all 127 slots in the fingerprint sensor
+        for (int i = 1; i <= 127; i++) {
+          uint8_t p = finger.loadModel(i);
+          if (p == FINGERPRINT_OK) {
+            // Template exists at this slot! Check if it's in the server array
+            bool found = false;
+            for (JsonVariant v : serverIds) {
+              if (v.as<int>() == i) {
+                found = true;
+                break;
+              }
+            }
+            
+            if (!found) {
+              Serial.print("Orphan found! Deleting ID #"); Serial.println(i);
+              finger.deleteModel(i);
             }
           }
-          
-          if (!found) {
-            Serial.print("Orphan found! Deleting ID #"); Serial.println(i);
-            finger.deleteModel(i);
-          }
         }
+        Serial.println("Sync Complete!");
+      } else {
+        Serial.println("JSON parse error during sync.");
       }
-      Serial.println("Sync Complete!");
     } else {
-      Serial.println("JSON parse error during sync.");
+      Serial.println("Failed to fetch sync data from server.");
     }
-  } else {
-    Serial.println("Failed to fetch sync data from server.");
+    http.end();
+    globalSecureClient.stop();
+    xSemaphoreGive(wifiMutex);
   }
-  http.end();
-  globalSecureClient.stop();
 }
