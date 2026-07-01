@@ -1520,16 +1520,26 @@ retry_first_scan:
     bool success = false;
     while (millis() - start < 15000) {
       if (currentMode != 1) return; // ABORT immediately!
-      if (finger.getImage() == FINGERPRINT_OK) {
-        if (finger.image2Tz(1) == FINGERPRINT_OK) {
+      
+      uint8_t p = finger.getImage();
+      if (p == FINGERPRINT_OK) {
+        Serial.println("Image taken! Converting...");
+        uint8_t tz = finger.image2Tz(1);
+        if (tz == FINGERPRINT_OK) {
+          Serial.println("Convert success!");
           success = true;
           break;
+        } else {
+          Serial.print("Convert failed! Code: 0x");
+          Serial.println(tz, HEX);
         }
-        // If image2Tz fails, it was a false positive. Ignore silently and keep trying.
       }
       vTaskDelay(50 / portTICK_PERIOD_MS); // Prevent ESP32 Watchdog Timer Crash!
     }
-    if (!success) goto timeout;
+    if (!success) {
+      Serial.println("Step 1 Timeout!");
+      goto timeout;
+    }
   }
   
   // Step 2: Delay slightly to capture second image
@@ -1537,6 +1547,7 @@ retry_first_scan:
   tft.setCursor(10, 110);
   tft.setTextColor(ILI9341_YELLOW);
   tft.println("Hold finger still...");
+  Serial.println("Holding for 1 second...");
   
   delay(1000); // Give 1 second delay to ensure a clean second scan
   
@@ -1546,21 +1557,33 @@ retry_second_scan:
   tft.setCursor(10, 110);
   tft.setTextColor(ILI9341_YELLOW);
   tft.println("Scanning again...");
+  Serial.println("Scanning second image...");
   
   {
     unsigned long start = millis();
     bool success = false;
     while (millis() - start < 15000) {
       if (currentMode != 1) return; // ABORT immediately!
-      if (finger.getImage() == FINGERPRINT_OK) {
-        if (finger.image2Tz(2) == FINGERPRINT_OK) {
+      
+      uint8_t p = finger.getImage();
+      if (p == FINGERPRINT_OK) {
+        Serial.println("Image 2 taken! Converting...");
+        uint8_t tz = finger.image2Tz(2);
+        if (tz == FINGERPRINT_OK) {
+          Serial.println("Convert 2 success!");
           success = true;
           break;
+        } else {
+          Serial.print("Convert 2 failed! Code: 0x");
+          Serial.println(tz, HEX);
         }
       }
       vTaskDelay(50 / portTICK_PERIOD_MS); // Prevent ESP32 Watchdog Timer Crash!
     }
-    if (!success) goto timeout;
+    if (!success) {
+      Serial.println("Step 3 Timeout!");
+      goto timeout;
+    }
   }
   
   // Step 4: Create and Store Model
