@@ -30,6 +30,8 @@ const int   daylightOffset_sec = 0;
 #ifndef ICONS_H
 #define ICONS_H
 
+WiFiClientSecure globalSecureClient;
+
 #include <pgmspace.h>
 
 const uint16_t icon_success[4096] PROGMEM = {
@@ -999,6 +1001,7 @@ void syncTimeFromNTP() {
 }
 
 void setup() {
+  globalSecureClient.setInsecure();
   Serial.begin(115200);
   Serial.println("\n--- ATTENDANCE SYSTEM BOOT ---");
 
@@ -1157,10 +1160,8 @@ void networkTaskCode(void * pvParameters) {
       // 1. Process Offline Queue
       LogRecord log;
       if (xQueueReceive(logQueue, &log, 0) == pdPASS) {
-        WiFiClientSecure client;
-        client.setInsecure();
         HTTPClient http;
-        http.begin(client, serverUrl);
+        http.begin(globalSecureClient, serverUrl);
         http.addHeader("x-api-key", API_KEY);
         http.addHeader("Content-Type", "application/json");
         
@@ -1193,11 +1194,9 @@ void networkTaskCode(void * pvParameters) {
       static unsigned long lastPoll = 0;
       if (millis() - lastPoll > 2000) {
         lastPoll = millis();
-        WiFiClientSecure client;
-        client.setInsecure();
         HTTPClient http;
         String statusUrl = String(hardwareUrl) + "/status";
-        http.begin(client, statusUrl);
+        http.begin(globalSecureClient, statusUrl);
         http.addHeader("x-api-key", API_KEY);
         int httpCode = http.GET();
         if (httpCode == 200) {
@@ -1302,10 +1301,8 @@ void loop() {
     syncFingerprints();
     
     // Reset server back to attendance mode (sync is one-shot)
-    WiFiClientSecure client;
-    client.setInsecure();
     HTTPClient http;
-    http.begin(client, String(hardwareUrl) + "/reset");
+    http.begin(globalSecureClient, String(hardwareUrl) + "/reset");
     http.addHeader("x-api-key", API_KEY);
     http.POST("");
     http.end();
@@ -1429,11 +1426,9 @@ void postEnrollResult(String identifier) {
   tft.setTextColor(ILI9341_WHITE);
   tft.println("Sent to server...");
   
-  WiFiClientSecure client;
-  client.setInsecure();
   HTTPClient http;
   String url = String(hardwareUrl) + "/enroll_result";
-  http.begin(client, url);
+  http.begin(globalSecureClient, url);
   http.addHeader("x-api-key", API_KEY);
   http.addHeader("Content-Type", "application/json");
   
@@ -1580,10 +1575,8 @@ timeout:
 
 void syncFingerprints() {
   Serial.println("--- Starting Fingerprint Sync ---");
-  WiFiClientSecure client;
-  client.setInsecure();
   HTTPClient http;
-  http.begin(client, syncUrl);
+  http.begin(globalSecureClient, syncUrl);
   http.addHeader("x-api-key", API_KEY);
   
   int httpCode = http.GET();
