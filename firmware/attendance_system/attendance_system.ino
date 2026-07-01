@@ -1209,7 +1209,14 @@ void networkTaskCode(void * pvParameters) {
             if (newMode != currentMode) {
               currentMode = newMode;
               modeChanged = true;
+              Serial.println("Mode changed to: " + currentMode);
             }
+          }
+        } else {
+          Serial.print("Polling Server Failed. HTTP Code: ");
+          Serial.println(httpCode);
+          if (httpCode < 0) {
+             Serial.printf("Error details: %s\n", http.errorToString(httpCode).c_str());
           }
         }
         http.end();
