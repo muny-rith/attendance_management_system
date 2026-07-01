@@ -1472,6 +1472,7 @@ uint8_t waitForFingerState(uint8_t targetState, unsigned long timeoutMs) {
   while (millis() - start < timeoutMs) {
     p = finger.getImage();
     if (p == targetState) return p;
+    vTaskDelay(50 / portTICK_PERIOD_MS); // Prevent ESP32 Watchdog Timer Crash!
   }
   return 255;
 }
@@ -1514,6 +1515,7 @@ retry_first_scan:
         }
         // If image2Tz fails, it was a false positive. Ignore silently and keep trying.
       }
+      vTaskDelay(50 / portTICK_PERIOD_MS); // Prevent ESP32 Watchdog Timer Crash!
     }
     if (!success) goto timeout;
   }
@@ -1543,6 +1545,7 @@ retry_second_scan:
           break;
         }
       }
+      vTaskDelay(50 / portTICK_PERIOD_MS); // Prevent ESP32 Watchdog Timer Crash!
     }
     if (!success) goto timeout;
   }
