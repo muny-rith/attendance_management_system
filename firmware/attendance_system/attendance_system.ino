@@ -1461,20 +1461,22 @@ void enrollRFID() {
 
 uint8_t waitForFingerState(uint8_t targetState, unsigned long timeoutMs) {
   unsigned long start = millis();
-  uint8_t p = -1;
-  uint8_t last_p = -1;
+  unsigned long lastPrint = 0;
+  uint8_t p = 0;
   while (millis() - start < timeoutMs) {
     if (currentMode != "enroll_fingerprint") return 254; // ABORT immediately!
     p = finger.getImage();
-    if (p != last_p) {
-      Serial.print("Sensor state changed to: 0x");
+    
+    if (millis() - lastPrint > 1000) {
+      Serial.print("Waiting for finger removal... Sensor returned: 0x");
       Serial.println(p, HEX);
-      last_p = p;
+      lastPrint = millis();
     }
+    
     if (p == targetState) return p;
-    vTaskDelay(50 / portTICK_PERIOD_MS); // Yield to other tasks
+    vTaskDelay(50 / portTICK_PERIOD_MS);
   }
-  return 255; // Timeout
+  return 255;
 }
 
 void enrollFingerprint() {
