@@ -1,16 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg-primary: #F3F4F6; /* Cool gray 100 for a clean background */
-  --bg-secondary: #FFFFFF; /* Pure white cards */
-  --text-primary: #111827; /* Gray 900 for high contrast text */
-  --text-secondary: #4B5563; /* Gray 600 for secondary text */
-  --accent-cyan: #2563EB; /* Professional Blue 600 */
-  --accent-cyan-hover: #1D4ED8; /* Blue 700 */
-  --accent-green: #059669; /* Emerald 600 */
-  --accent-danger: #DC2626; /* Red 600 */
-  --glass-border: #E5E7EB; /* Gray 200 crisp borders */
-  
+  --bg-primary: #e2e2e2;
+  /* Cool gray 100 for a clean background */
+  --bg-secondary: #FFFFFF;
+  /* Pure white cards */
+  --text-primary: #111827;
+  /* Gray 900 for high contrast text */
+  --text-secondary: #4B5563;
+  /* Gray 600 for secondary text */
+  --accent-cyan: #2563EB;
+  /* Professional Blue 600 */
+  --accent-cyan-hover: #1D4ED8;
+  /* Blue 700 */
+  --accent-green: #059669;
+  /* Emerald 600 */
+  --accent-danger: #DC2626;
+  /* Red 600 */
+  --glass-border: #E5E7EB;
+  /* Gray 200 crisp borders */
+
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
@@ -42,7 +51,8 @@ body {
 }
 
 /* Hide blobs for a cleaner look */
-.blob-1, .blob-2 {
+.blob-1,
+.blob-2 {
   display: none;
 }
 
@@ -62,9 +72,13 @@ body {
   padding: 1.5rem 2.5rem;
   margin-bottom: 2rem;
   box-shadow: var(--shadow-sm);
+}
+
+.header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .header-content h1 {
@@ -96,8 +110,15 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: .5;
+  }
 }
 
 /* Main Content */
@@ -369,7 +390,8 @@ body {
   gap: 0.5rem;
 }
 
-.delete-btn, .edit-btn {
+.delete-btn,
+.edit-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -493,8 +515,15 @@ body {
 }
 
 @keyframes modalPop {
-  0% { transform: scale(0.95); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .close-btn {
