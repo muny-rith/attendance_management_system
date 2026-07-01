@@ -1191,6 +1191,7 @@ void networkTaskCode(void * pvParameters) {
           vTaskDelay(2000 / portTICK_PERIOD_MS); // wait before retry
         }
         http.end();
+        xSemaphoreGive(wifiMutex);
       }
       
       // 2. Poll server for mode (every 2 seconds)
@@ -1228,7 +1229,7 @@ void networkTaskCode(void * pvParameters) {
           }
         }
         http.end();
-        globalSecureClient.stop();
+        xSemaphoreGive(wifiMutex);
       }
     }
     vTaskDelay(50 / portTICK_PERIOD_MS); // Yield to other tasks
@@ -1430,7 +1431,6 @@ void resetServer() {
     http.addHeader("x-api-key", API_KEY);
     http.POST("");
     http.end();
-    globalSecureClient.stop();
     xSemaphoreGive(wifiMutex);
   }
 }
@@ -1456,7 +1456,6 @@ void postEnrollResult(String identifier) {
     String payload = "{\"identifier\":\"" + identifier + "\"}";
     http.POST(payload);
     http.end();
-    globalSecureClient.stop();
     xSemaphoreGive(wifiMutex);
   }
   
@@ -1639,7 +1638,6 @@ void syncFingerprints() {
       Serial.println("Failed to fetch sync data from server.");
     }
     http.end();
-    globalSecureClient.stop();
     xSemaphoreGive(wifiMutex);
   }
 }
