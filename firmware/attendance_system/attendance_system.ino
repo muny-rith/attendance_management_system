@@ -1432,7 +1432,6 @@ void resetServer() {
     http.addHeader("x-api-key", API_KEY);
     http.POST("");
     http.end();
-  }
 }
 
 void postEnrollResult(String identifier) {
@@ -1457,7 +1456,6 @@ void postEnrollResult(String identifier) {
     String payload = "{\"identifier\":\"" + identifier + "\"}";
     http.POST(payload);
     http.end();
-  }
   
   currentMode = 0;
   resetScreen();
@@ -1639,5 +1637,4 @@ void syncFingerprints() {
       Serial.println("Failed to fetch sync data from server.");
     }
     http.end();
-  }
 }
