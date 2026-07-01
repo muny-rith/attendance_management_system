@@ -1455,13 +1455,18 @@ void enrollRFID() {
   postEnrollResult(uidStr);
 }
 
-// Helper to wait for a specific fingerprint state with timeout
 uint8_t waitForFingerState(uint8_t targetState, unsigned long timeoutMs) {
   unsigned long start = millis();
   uint8_t p = -1;
+  uint8_t last_p = -1;
   while (millis() - start < timeoutMs) {
     if (currentMode != "enroll_fingerprint") return 254; // ABORT immediately!
     p = finger.getImage();
+    if (p != last_p) {
+      Serial.print("Sensor state changed to: 0x");
+      Serial.println(p, HEX);
+      last_p = p;
+    }
     if (p == targetState) return p;
     vTaskDelay(50 / portTICK_PERIOD_MS); // Yield to other tasks
   }
