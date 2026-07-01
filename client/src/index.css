@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg-primary: #0f172a;
-  --bg-secondary: rgba(30, 41, 59, 0.7);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --accent-cyan: #22d3ee;
-  --accent-green: #10b981;
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --bg-primary: #FAF6F0; /* Soft creamy off-white */
+  --bg-secondary: rgba(255, 255, 255, 0.7); /* Glassy white */
+  --text-primary: #2C1E16; /* Deep espresso brown */
+  --text-secondary: #735D50; /* Muted latte brown */
+  --accent-cyan: #C88D5D; /* Caramel Gold (replacing cyan) */
+  --accent-green: #8B5A33; /* Rich Mocha (replacing green) */
+  --glass-border: rgba(200, 141, 93, 0.2); /* Caramel tinted border */
 }
 
 * {
@@ -43,7 +43,7 @@ body {
   left: -10%;
   width: 500px;
   height: 500px;
-  background: rgba(34, 211, 238, 0.3);
+  background: rgba(200, 141, 93, 0.2); /* Soft caramel */
 }
 
 .blob-2 {
@@ -51,7 +51,7 @@ body {
   right: -10%;
   width: 600px;
   height: 600px;
-  background: rgba(16, 185, 129, 0.2);
+  background: rgba(139, 90, 51, 0.15); /* Soft mocha */
 }
 
 .content-wrapper {
@@ -71,7 +71,7 @@ body {
   border-radius: 16px;
   padding: 1.5rem 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(200, 141, 93, 0.1); /* Warmer shadow */
 }
 
 .header-content {
@@ -94,13 +94,13 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(139, 90, 51, 0.1);
   color: var(--accent-green);
   padding: 0.5rem 1rem;
   border-radius: 999px;
   font-weight: 500;
   font-size: 0.9rem;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(139, 90, 51, 0.2);
 }
 
 .pulse-icon {
@@ -132,7 +132,7 @@ body {
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(200, 141, 93, 0.1);
 }
 
 .table-header {
@@ -148,11 +148,12 @@ body {
 }
 
 .records-count {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(200, 141, 93, 0.1);
   padding: 0.4rem 1rem;
   border-radius: 8px;
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: var(--accent-cyan);
+  font-weight: 600;
 }
 
 /* Table Styles */
@@ -178,9 +179,9 @@ body {
 
 .table-row {
   /* padding: 1rem; */
-  background: rgba(255, 255, 255, 0.03);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.5);
+  border-top: 1px solid rgba(200, 141, 93, 0.1);
+  border-bottom: 1px solid rgba(200, 141, 93, 0.1);
   transition: all 0.3s ease;
 }
 
@@ -214,8 +215,8 @@ body {
 
 .table-row:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 12px rgba(200, 141, 93, 0.15);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .employee-name {
@@ -236,21 +237,21 @@ body {
 }
 
 .badge.fingerprint {
-  background: rgba(34, 211, 238, 0.1);
+  background: rgba(200, 141, 93, 0.15);
   color: var(--accent-cyan);
-  border: 1px solid rgba(34, 211, 238, 0.2);
+  border: 1px solid rgba(200, 141, 93, 0.3);
 }
 
 .badge.rfid {
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(139, 90, 51, 0.1);
   color: var(--accent-green);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(139, 90, 51, 0.2);
 }
 
 .badge.unknown {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(185, 28, 28, 0.1);
+  color: #b91c1c;
+  border: 1px solid rgba(185, 28, 28, 0.2);
 }
 
 .identifier {
@@ -281,9 +282,9 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(34, 211, 238, 0.1);
+  background: rgba(200, 141, 93, 0.1);
   color: var(--accent-cyan);
-  border: 1px solid rgba(34, 211, 238, 0.2);
+  border: 1px solid rgba(200, 141, 93, 0.3);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
@@ -292,7 +293,7 @@ body {
 }
 
 .export-btn:hover {
-  background: rgba(34, 211, 238, 0.2);
+  background: rgba(200, 141, 93, 0.2);
 }
 
 /* Tabs */
@@ -318,19 +319,19 @@ body {
 }
 
 .tab-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(200, 141, 93, 0.1);
 }
 
 .tab-btn.active {
-  background: rgba(34, 211, 238, 0.1);
+  background: rgba(200, 141, 93, 0.15);
   color: var(--accent-cyan);
-  border-color: rgba(34, 211, 238, 0.3);
+  border-color: rgba(200, 141, 93, 0.4);
 }
 
 /* Employee Manager */
 .add-employee-card {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px dashed rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px dashed rgba(200, 141, 93, 0.4);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -352,8 +353,8 @@ body {
 .add-employee-form input,
 .add-employee-form select {
   flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(200, 141, 93, 0.3);
   padding: 0.75rem;
   border-radius: 8px;
   color: var(--text-primary);
@@ -441,8 +442,8 @@ body {
 
 .add-employee-card.editing {
   border-color: var(--accent-cyan);
-  background: rgba(34, 211, 238, 0.05);
-  box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
+  background: rgba(200, 141, 93, 0.08);
+  box-shadow: 0 0 15px rgba(200, 141, 93, 0.1);
 }
 
 .empty-state {
@@ -473,9 +474,9 @@ body {
 }
 
 .register-inline-btn {
-  background: rgba(34, 211, 238, 0.1);
+  background: rgba(200, 141, 93, 0.15);
   color: var(--accent-cyan);
-  border: 1px solid rgba(34, 211, 238, 0.3);
+  border: 1px solid rgba(200, 141, 93, 0.3);
   padding: 0.3rem 0.8rem;
   border-radius: 6px;
   font-size: 0.85rem;
@@ -484,7 +485,7 @@ body {
 }
 
 .register-inline-btn:hover {
-  background: rgba(34, 211, 238, 0.2);
+  background: rgba(200, 141, 93, 0.25);
 }
 
 /* Modal */
@@ -510,7 +511,7 @@ body {
   width: 90%;
   max-width: 400px;
   position: relative;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 40px rgba(139, 90, 51, 0.2);
 }
 
 .close-btn {
@@ -542,7 +543,7 @@ body {
 }
 
 .modal-details {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(200, 141, 93, 0.05);
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
@@ -571,8 +572,8 @@ body {
 
 .register-form input,
 .register-form select {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(200, 141, 93, 0.3);
   padding: 0.75rem;
   border-radius: 8px;
   color: var(--text-primary);
@@ -607,6 +608,6 @@ body {
 }
 
 .register-form button:disabled {
-  background: #4b5563;
+  background: rgba(139, 90, 51, 0.4);
   cursor: not-allowed;
 }
