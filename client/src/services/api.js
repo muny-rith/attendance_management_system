@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // When running locally, point to the Express server on port 3000
-const API_URL = 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export const fetchAttendanceLogs = async () => {
   try {

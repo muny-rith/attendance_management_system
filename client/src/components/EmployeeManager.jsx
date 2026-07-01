@@ -3,7 +3,7 @@ import { fetchEmployees, addEmployee, deleteEmployee, editEmployee, checkHardwar
 import { Trash2, UserPlus, Pencil, X, CheckCircle, AlertCircle, RefreshCw, Cpu, Fingerprint, CreditCard } from 'lucide-react';
 import { io } from 'socket.io-client';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const EmployeeManager = () => {
   const [employees, setEmployees] = useState([]);

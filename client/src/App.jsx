@@ -8,7 +8,7 @@ import { fetchAttendanceLogs } from './services/api';
 import { Users, FileText } from 'lucide-react';
 import './index.css';
 
-const socket = io('http://localhost:3000');
+const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000');
 
 const App = () => {
   const [logs, setLogs] = useState([]);
