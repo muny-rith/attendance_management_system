@@ -962,7 +962,7 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 RTC_DS3231 rtc;
 
 unsigned long lastPollTime = 0;
-String currentMode = "attendance";
+volatile int currentMode = 0; // 0: attendance, 1: enroll_fingerprint, 2: enroll_rfid, 3: sync
 int lastMinute = -1;
 bool lastWifiStatus = false;
 bool modeChanged = false;
@@ -1206,11 +1206,16 @@ void networkTaskCode(void * pvParameters) {
           JsonDocument doc;
           DeserializationError error = deserializeJson(doc, payload);
           if (!error) {
-            String newMode = doc["mode"].as<String>();
+            String newModeStr = doc["mode"].as<String>();
+            int newMode = 0;
+            if (newModeStr == "enroll_fingerprint") newMode = 1;
+            else if (newModeStr == "enroll_rfid") newMode = 2;
+            else if (newModeStr == "sync") newMode = 3;
+            
             if (newMode != currentMode) {
               currentMode = newMode;
               modeChanged = true;
-              Serial.println("Mode changed to: " + currentMode);
+              Serial.println("Mode changed to: " + newModeStr);
             }
           }
         } else {
@@ -1229,7 +1234,7 @@ void networkTaskCode(void * pvParameters) {
 }
 
 void loop() {
-  if (currentMode == "attendance") {
+  if (currentMode == 0) {
     if (modeChanged) {
       resetScreen();
       modeChanged = false;
@@ -1266,7 +1271,7 @@ void loop() {
 
     checkFingerprint();
     checkRFID();
-  } else if (currentMode == "enroll_fingerprint") {
+  } else if (currentMode == 1) {
     if (modeChanged) {
       tft.fillScreen(ILI9341_BLACK);
       tft.fillRoundRect(10, 10, 300, 45, 8, tft.color565(80, 80, 30));
@@ -1279,7 +1284,7 @@ void loop() {
       modeChanged = false;
     }
     enrollFingerprint();
-  } else if (currentMode == "enroll_rfid") {
+  } else if (currentMode == 2) {
     if (modeChanged) {
       tft.fillScreen(ILI9341_BLACK);
       tft.fillRoundRect(10, 10, 300, 45, 8, tft.color565(80, 80, 30));
@@ -1292,7 +1297,7 @@ void loop() {
       modeChanged = false;
     }
     enrollRFID();
-  } else if (currentMode == "sync") {
+  } else if (currentMode == 3) {
     tft.fillScreen(ILI9341_BLACK);
     tft.fillRoundRect(10, 10, 300, 45, 8, tft.color565(80, 80, 30));
     tft.setTextColor(ILI9341_WHITE, tft.color565(80, 80, 30));
@@ -1306,7 +1311,7 @@ void loop() {
     // Reset server back to attendance mode (sync is one-shot)
     resetServer();
     
-    currentMode = "attendance";
+    currentMode = 0;
     resetScreen();
   }
   
@@ -1447,7 +1452,7 @@ void postEnrollResult(String identifier) {
   http.end();
   globalSecureClient.stop();
   
-  currentMode = "attendance";
+  currentMode = 0;
   resetScreen();
 }
 
@@ -1470,7 +1475,7 @@ uint8_t waitForFingerState(uint8_t targetState, unsigned long timeoutMs) {
   unsigned long start = millis();
   uint8_t p = -1;
   while (millis() - start < timeoutMs) {
-    if (currentMode != "enroll_fingerprint") return 254; // ABORT immediately!
+    if (currentMode != 1) return 254; // ABORT immediately!
     p = finger.getImage();
     if (p == targetState) return p;
     vTaskDelay(50 / portTICK_PERIOD_MS); // Prevent ESP32 Watchdog Timer Crash!
@@ -1491,7 +1496,7 @@ void enrollFingerprint() {
     tft.setTextColor(ILI9341_RED);
     tft.println("MEMORY FULL");
     delay(2000);
-    currentMode = "attendance";
+    currentMode = 0;
     resetScreen();
     return;
   }
@@ -1509,7 +1514,7 @@ retry_first_scan:
     unsigned long start = millis();
     bool success = false;
     while (millis() - start < 15000) {
-      if (currentMode != "enroll_fingerprint") return; // ABORT immediately!
+      if (currentMode != 1) return; // ABORT immediately!
       if (finger.getImage() == FINGERPRINT_OK) {
         if (finger.image2Tz(1) == FINGERPRINT_OK) {
           success = true;
@@ -1541,7 +1546,7 @@ retry_second_scan:
     unsigned long start = millis();
     bool success = false;
     while (millis() - start < 15000) {
-      if (currentMode != "enroll_fingerprint") return; // ABORT immediately!
+      if (currentMode != 1) return; // ABORT immediately!
       if (finger.getImage() == FINGERPRINT_OK) {
         if (finger.image2Tz(2) == FINGERPRINT_OK) {
           success = true;
@@ -1576,7 +1581,7 @@ retry_second_scan:
   return;
 
 timeout:
-  currentMode = "attendance";
+  currentMode = 0;
   resetServer();
   resetScreen();
 }
