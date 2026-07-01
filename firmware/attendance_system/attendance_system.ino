@@ -1470,6 +1470,7 @@ uint8_t waitForFingerState(uint8_t targetState, unsigned long timeoutMs) {
   unsigned long start = millis();
   uint8_t p = -1;
   while (millis() - start < timeoutMs) {
+    if (currentMode != "enroll_fingerprint") return 254; // ABORT immediately!
     p = finger.getImage();
     if (p == targetState) return p;
     vTaskDelay(50 / portTICK_PERIOD_MS); // Prevent ESP32 Watchdog Timer Crash!
@@ -1508,6 +1509,7 @@ retry_first_scan:
     unsigned long start = millis();
     bool success = false;
     while (millis() - start < 15000) {
+      if (currentMode != "enroll_fingerprint") return; // ABORT immediately!
       if (finger.getImage() == FINGERPRINT_OK) {
         if (finger.image2Tz(1) == FINGERPRINT_OK) {
           success = true;
@@ -1539,6 +1541,7 @@ retry_second_scan:
     unsigned long start = millis();
     bool success = false;
     while (millis() - start < 15000) {
+      if (currentMode != "enroll_fingerprint") return; // ABORT immediately!
       if (finger.getImage() == FINGERPRINT_OK) {
         if (finger.image2Tz(2) == FINGERPRINT_OK) {
           success = true;
