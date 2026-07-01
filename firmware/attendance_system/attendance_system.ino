@@ -1537,9 +1537,9 @@ retry_first_scan:
   tft.setTextColor(ILI9341_YELLOW);
   tft.println("Remove finger...");
   
-  state = waitForFingerState(FINGERPRINT_NOFINGER, 15000);
-  if (state == 254) return; // ABORT immediately!
-  if (state != FINGERPRINT_NOFINGER) goto timeout;
+  // HARDWARE BYPASS: The sensor is stuck reading 0x0 even when finger is removed.
+  // Instead of freezing in waitForFingerState, we just delay 2 seconds to give them time to lift it.
+  delay(2000);
   
 retry_second_scan:
   // Step 3: Scan Second Image
@@ -1573,7 +1573,6 @@ retry_second_scan:
     tft.println("Fingers didn't match!");
     tft.println("Restarting...");
     delay(2000);
-    waitForFingerState(FINGERPRINT_NOFINGER, 5000);
     goto retry_first_scan;
   } else if (p != FINGERPRINT_OK) {
     goto timeout;
