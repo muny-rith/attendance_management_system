@@ -1229,7 +1229,7 @@ void networkTaskCode(void * pvParameters) {
           }
         }
         http.end();
-        xSemaphoreGive(wifiMutex);
+        client.stop();
       }
     }
     vTaskDelay(50 / portTICK_PERIOD_MS); // Yield to other tasks
