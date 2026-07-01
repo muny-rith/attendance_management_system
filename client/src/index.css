@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg-primary: #FAF6F0; /* Soft creamy off-white */
-  --bg-secondary: rgba(255, 255, 255, 0.7); /* Glassy white */
-  --text-primary: #2C1E16; /* Deep espresso brown */
-  --text-secondary: #735D50; /* Muted latte brown */
-  --accent-cyan: #C88D5D; /* Caramel Gold (replacing cyan) */
-  --accent-green: #8B5A33; /* Rich Mocha (replacing green) */
-  --glass-border: rgba(200, 141, 93, 0.2); /* Caramel tinted border */
+  --bg-primary: #F8F6F4; /* Very light earthy gray/brown */
+  --bg-secondary: #FFFFFF; /* Pure white for high contrast cards */
+  --text-primary: #1A1614; /* Near black espresso for maximum readability */
+  --text-secondary: #5A4E46; /* Strong medium brown for secondary text */
+  --accent-cyan: #B45309; /* Strong Amber/Brown for primary accents */
+  --accent-green: #047857; /* Deep emerald green for success/positive actions */
+  --glass-border: rgba(180, 83, 9, 0.15); /* Subtle earthy border */
 }
 
 * {
@@ -43,7 +43,7 @@ body {
   left: -10%;
   width: 500px;
   height: 500px;
-  background: rgba(200, 141, 93, 0.2); /* Soft caramel */
+  background: rgba(180, 83, 9, 0.1); /* Amber tint */
 }
 
 .blob-2 {
@@ -51,7 +51,7 @@ body {
   right: -10%;
   width: 600px;
   height: 600px;
-  background: rgba(139, 90, 51, 0.15); /* Soft mocha */
+  background: rgba(4, 120, 87, 0.08); /* Emerald tint */
 }
 
 .content-wrapper {
@@ -65,13 +65,11 @@ body {
 /* Glass Header */
 .glass-header {
   background: var(--bg-secondary);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 1.5rem 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 8px 32px 0 rgba(200, 141, 93, 0.1); /* Warmer shadow */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Clean, crisp shadow */
 }
 
 .header-content {
@@ -94,13 +92,13 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(139, 90, 51, 0.1);
+  background: rgba(4, 120, 87, 0.1);
   color: var(--accent-green);
   padding: 0.5rem 1rem;
   border-radius: 999px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.9rem;
-  border: 1px solid rgba(139, 90, 51, 0.2);
+  border: 1px solid rgba(4, 120, 87, 0.2);
 }
 
 .pulse-icon {
@@ -127,12 +125,10 @@ body {
 /* Main Content */
 .main-content {
   background: var(--bg-secondary);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 8px 32px 0 rgba(200, 141, 93, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .table-header {
@@ -148,12 +144,12 @@ body {
 }
 
 .records-count {
-  background: rgba(200, 141, 93, 0.1);
+  background: rgba(180, 83, 9, 0.1);
   padding: 0.4rem 1rem;
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--accent-cyan);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* Table Styles */
@@ -178,11 +174,10 @@ body {
 }
 
 .table-row {
-  /* padding: 1rem; */
-  background: rgba(255, 255, 255, 0.5);
-  border-top: 1px solid rgba(200, 141, 93, 0.1);
-  border-bottom: 1px solid rgba(200, 141, 93, 0.1);
-  transition: all 0.3s ease;
+  background: #FFFFFF;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
 }
 
 .attendance-table td {
@@ -215,8 +210,8 @@ body {
 
 .table-row:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(200, 141, 93, 0.15);
-  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: #FAFAFA;
 }
 
 .employee-name {
@@ -237,21 +232,21 @@ body {
 }
 
 .badge.fingerprint {
-  background: rgba(200, 141, 93, 0.15);
+  background: rgba(180, 83, 9, 0.1);
   color: var(--accent-cyan);
-  border: 1px solid rgba(200, 141, 93, 0.3);
+  border: 1px solid rgba(180, 83, 9, 0.3);
 }
 
 .badge.rfid {
-  background: rgba(139, 90, 51, 0.1);
+  background: rgba(4, 120, 87, 0.1);
   color: var(--accent-green);
-  border: 1px solid rgba(139, 90, 51, 0.2);
+  border: 1px solid rgba(4, 120, 87, 0.3);
 }
 
 .badge.unknown {
-  background: rgba(185, 28, 28, 0.1);
-  color: #b91c1c;
-  border: 1px solid rgba(185, 28, 28, 0.2);
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
 }
 
 .identifier {
@@ -282,18 +277,20 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(200, 141, 93, 0.1);
-  color: var(--accent-cyan);
-  border: 1px solid rgba(200, 141, 93, 0.3);
+  background: #FFFFFF;
+  color: var(--text-primary);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .export-btn:hover {
-  background: rgba(200, 141, 93, 0.2);
+  background: #F3F4F6;
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
 /* Tabs */
@@ -307,31 +304,33 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--bg-secondary);
+  background: #F3F4F6;
   color: var(--text-secondary);
-  border: 1px solid var(--glass-border);
+  border: 1px solid transparent;
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .tab-btn:hover {
-  background: rgba(200, 141, 93, 0.1);
+  background: #E5E7EB;
+  color: var(--text-primary);
 }
 
 .tab-btn.active {
-  background: rgba(200, 141, 93, 0.15);
+  background: #FFFFFF;
   color: var(--accent-cyan);
-  border-color: rgba(200, 141, 93, 0.4);
+  border: 1px solid rgba(180, 83, 9, 0.3);
+  box-shadow: 0 2px 8px rgba(180, 83, 9, 0.1);
 }
 
 /* Employee Manager */
 .add-employee-card {
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px dashed rgba(200, 141, 93, 0.4);
+  background: #FAFAFA;
+  border: 1px dashed rgba(0, 0, 0, 0.2);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -353,13 +352,14 @@ body {
 .add-employee-form input,
 .add-employee-form select {
   flex: 1;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(200, 141, 93, 0.3);
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0.75rem;
   border-radius: 8px;
   color: var(--text-primary);
   font-family: inherit;
   font-size: 1rem;
+  font-weight: 500;
 }
 
 .add-employee-form input:focus,
@@ -389,9 +389,9 @@ body {
 }
 
 .delete-btn {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
   padding: 0.4rem;
   border-radius: 6px;
   cursor: pointer;
@@ -402,13 +402,13 @@ body {
 }
 
 .delete-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
+  background: #FECACA;
 }
 
 .edit-btn {
-  background: rgba(34, 211, 238, 0.1);
-  color: var(--accent-cyan);
-  border: 1px solid rgba(34, 211, 238, 0.2);
+  background: #F3F4F6;
+  color: var(--text-primary);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0.4rem;
   border-radius: 6px;
   cursor: pointer;
@@ -419,7 +419,7 @@ body {
 }
 
 .edit-btn:hover {
-  background: rgba(34, 211, 238, 0.2);
+  background: #E5E7EB;
 }
 
 .action-cells {
@@ -442,8 +442,8 @@ body {
 
 .add-employee-card.editing {
   border-color: var(--accent-cyan);
-  background: rgba(200, 141, 93, 0.08);
-  box-shadow: 0 0 15px rgba(200, 141, 93, 0.1);
+  background: rgba(180, 83, 9, 0.05);
+  box-shadow: 0 0 10px rgba(180, 83, 9, 0.1);
 }
 
 .empty-state {
@@ -474,18 +474,20 @@ body {
 }
 
 .register-inline-btn {
-  background: rgba(200, 141, 93, 0.15);
+  background: #FFFFFF;
   color: var(--accent-cyan);
-  border: 1px solid rgba(200, 141, 93, 0.3);
+  border: 1px solid rgba(180, 83, 9, 0.3);
   padding: 0.3rem 0.8rem;
   border-radius: 6px;
   font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .register-inline-btn:hover {
-  background: rgba(200, 141, 93, 0.25);
+  background: rgba(180, 83, 9, 0.05);
 }
 
 /* Modal */
@@ -543,10 +545,11 @@ body {
 }
 
 .modal-details {
-  background: rgba(200, 141, 93, 0.05);
+  background: #F3F4F6;
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .detail-row {
@@ -572,13 +575,14 @@ body {
 
 .register-form input,
 .register-form select {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(200, 141, 93, 0.3);
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0.75rem;
   border-radius: 8px;
   color: var(--text-primary);
   font-family: inherit;
   font-size: 1rem;
+  font-weight: 500;
 }
 
 .register-form input:focus,
@@ -608,6 +612,7 @@ body {
 }
 
 .register-form button:disabled {
-  background: rgba(139, 90, 51, 0.4);
+  background: #D1D5DB;
+  color: #9CA3AF;
   cursor: not-allowed;
 }
