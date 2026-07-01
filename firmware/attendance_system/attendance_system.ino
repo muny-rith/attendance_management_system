@@ -1,6 +1,7 @@
 #include <WiFi.h>
 #include <WiFiManager.h>
 #include <HTTPClient.h>
+#include <WiFiClientSecure.h>
 #include <Wire.h>
 #include <SPI.h>
 #include <RTClib.h>
@@ -1156,8 +1157,10 @@ void networkTaskCode(void * pvParameters) {
       // 1. Process Offline Queue
       LogRecord log;
       if (xQueueReceive(logQueue, &log, 0) == pdPASS) {
+        WiFiClientSecure client;
+        client.setInsecure();
         HTTPClient http;
-        http.begin(serverUrl);
+        http.begin(client, serverUrl);
         http.addHeader("x-api-key", API_KEY);
         http.addHeader("Content-Type", "application/json");
         
@@ -1190,9 +1193,11 @@ void networkTaskCode(void * pvParameters) {
       static unsigned long lastPoll = 0;
       if (millis() - lastPoll > 2000) {
         lastPoll = millis();
+        WiFiClientSecure client;
+        client.setInsecure();
         HTTPClient http;
         String statusUrl = String(hardwareUrl) + "/status";
-        http.begin(statusUrl);
+        http.begin(client, statusUrl);
         http.addHeader("x-api-key", API_KEY);
         int httpCode = http.GET();
         if (httpCode == 200) {
@@ -1290,8 +1295,10 @@ void loop() {
     syncFingerprints();
     
     // Reset server back to attendance mode (sync is one-shot)
+    WiFiClientSecure client;
+    client.setInsecure();
     HTTPClient http;
-    http.begin(String(hardwareUrl) + "/reset");
+    http.begin(client, String(hardwareUrl) + "/reset");
     http.addHeader("x-api-key", API_KEY);
     http.POST("");
     http.end();
@@ -1415,9 +1422,11 @@ void postEnrollResult(String identifier) {
   tft.setTextColor(ILI9341_WHITE);
   tft.println("Sent to server...");
   
+  WiFiClientSecure client;
+  client.setInsecure();
   HTTPClient http;
   String url = String(hardwareUrl) + "/enroll_result";
-  http.begin(url);
+  http.begin(client, url);
   http.addHeader("x-api-key", API_KEY);
   http.addHeader("Content-Type", "application/json");
   
@@ -1564,8 +1573,10 @@ timeout:
 
 void syncFingerprints() {
   Serial.println("--- Starting Fingerprint Sync ---");
+  WiFiClientSecure client;
+  client.setInsecure();
   HTTPClient http;
-  http.begin(syncUrl);
+  http.begin(client, syncUrl);
   http.addHeader("x-api-key", API_KEY);
   
   int httpCode = http.GET();
