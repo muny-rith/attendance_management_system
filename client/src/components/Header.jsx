@@ -4,10 +4,10 @@ import { Activity, Download } from 'lucide-react';
 const Header = ({ logs = [] }) => {
   const exportToCSV = () => {
     if (logs.length === 0) return alert("No logs to export");
-    
+
     const headers = ["ID", "Employee Name", "Method", "Identifier", "Timestamp"];
     const csvRows = [headers.join(",")];
-    
+
     logs.forEach(log => {
       const row = [
         log.id,
@@ -18,7 +18,7 @@ const Header = ({ logs = [] }) => {
       ];
       csvRows.push(row.join(","));
     });
-    
+
     const csvString = csvRows.join("\n");
     const blob = new Blob([csvString], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
@@ -34,13 +34,13 @@ const Header = ({ logs = [] }) => {
   return (
     <header className="glass-header">
       <div className="header-content">
-        <h1>Attendance<span>Hub</span></h1>
-        
+        <h1>Attendance<span> Moon</span></h1>
+
         <div className="header-actions">
           <button className="export-btn" onClick={exportToCSV}>
             <Download size={16} /> Export CSV
           </button>
-          
+
           <div className="status-indicator">
             <Activity size={18} className="pulse-icon" />
             <span>Live Sync</span>
