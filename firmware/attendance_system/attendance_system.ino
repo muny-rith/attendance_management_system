@@ -30,8 +30,7 @@ const int   daylightOffset_sec = 0;
 #ifndef ICONS_H
 #define ICONS_H
 
-WiFiClientSecure globalSecureClient;
-SemaphoreHandle_t wifiMutex;
+// Removed globalSecureClient and wifiMutex
 
 #include <pgmspace.h>
 
@@ -1002,8 +1001,6 @@ void syncTimeFromNTP() {
 }
 
 void setup() {
-  wifiMutex = xSemaphoreCreateMutex();
-  globalSecureClient.setInsecure();
   Serial.begin(115200);
   Serial.println("\n--- ATTENDANCE SYSTEM BOOT ---");
 
@@ -1162,8 +1159,10 @@ void networkTaskCode(void * pvParameters) {
       // 1. Process Offline Queue
       LogRecord log;
       if (xQueueReceive(logQueue, &log, 0) == pdPASS) {
+        WiFiClientSecure client;
+        client.setInsecure();
         HTTPClient http;
-        http.begin(globalSecureClient, serverUrl);
+        http.begin(client, serverUrl);
         http.addHeader("Connection", "close");
         http.addHeader("x-api-key", API_KEY);
         http.addHeader("Content-Type", "application/json");
@@ -1191,16 +1190,17 @@ void networkTaskCode(void * pvParameters) {
           vTaskDelay(2000 / portTICK_PERIOD_MS); // wait before retry
         }
         http.end();
-        xSemaphoreGive(wifiMutex);
       }
       
       // 2. Poll server for mode (every 2 seconds)
       static unsigned long lastPoll = 0;
       if (millis() - lastPoll > 2000) {
         lastPoll = millis();
+        WiFiClientSecure client;
+        client.setInsecure();
         HTTPClient http;
         String statusUrl = String(hardwareUrl) + "/status";
-        http.begin(globalSecureClient, statusUrl);
+        http.begin(client, statusUrl);
         http.addHeader("Connection", "close");
         http.addHeader("x-api-key", API_KEY);
         int httpCode = http.GET();
@@ -1424,14 +1424,14 @@ void checkRFID() {
 // Polling logic moved to Core 0
 
 void resetServer() {
-  if (xSemaphoreTake(wifiMutex, portMAX_DELAY) == pdTRUE) {
-    HTTPClient http;
-    http.begin(globalSecureClient, String(hardwareUrl) + "/reset");
+  WiFiClientSecure client;
+  client.setInsecure();
+  HTTPClient http;
+  http.begin(client, String(hardwareUrl) + "/reset");
     http.addHeader("Connection", "close");
     http.addHeader("x-api-key", API_KEY);
     http.POST("");
     http.end();
-    xSemaphoreGive(wifiMutex);
   }
 }
 
@@ -1445,10 +1445,11 @@ void postEnrollResult(String identifier) {
   tft.setTextColor(ILI9341_WHITE);
   tft.println("Sent to server...");
   
-  if (xSemaphoreTake(wifiMutex, portMAX_DELAY) == pdTRUE) {
-    HTTPClient http;
-    String url = String(hardwareUrl) + "/enroll_result";
-    http.begin(globalSecureClient, url);
+  WiFiClientSecure client;
+  client.setInsecure();
+  HTTPClient http;
+  String url = String(hardwareUrl) + "/enroll_result";
+  http.begin(client, url);
     http.addHeader("Connection", "close");
     http.addHeader("x-api-key", API_KEY);
     http.addHeader("Content-Type", "application/json");
@@ -1456,7 +1457,6 @@ void postEnrollResult(String identifier) {
     String payload = "{\"identifier\":\"" + identifier + "\"}";
     http.POST(payload);
     http.end();
-    xSemaphoreGive(wifiMutex);
   }
   
   currentMode = 0;
@@ -1595,9 +1595,10 @@ timeout:
 
 void syncFingerprints() {
   Serial.println("--- Starting Fingerprint Sync ---");
-  if (xSemaphoreTake(wifiMutex, portMAX_DELAY) == pdTRUE) {
-    HTTPClient http;
-    http.begin(globalSecureClient, syncUrl);
+  WiFiClientSecure client;
+  client.setInsecure();
+  HTTPClient http;
+  http.begin(client, syncUrl);
     http.addHeader("Connection", "close");
     http.addHeader("x-api-key", API_KEY);
     
@@ -1638,6 +1639,5 @@ void syncFingerprints() {
       Serial.println("Failed to fetch sync data from server.");
     }
     http.end();
-    xSemaphoreGive(wifiMutex);
   }
 }
