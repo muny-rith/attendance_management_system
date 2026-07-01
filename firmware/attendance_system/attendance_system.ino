@@ -1162,6 +1162,7 @@ void networkTaskCode(void * pvParameters) {
       if (xQueueReceive(logQueue, &log, 0) == pdPASS) {
         HTTPClient http;
         http.begin(globalSecureClient, serverUrl);
+        http.addHeader("Connection", "close");
         http.addHeader("x-api-key", API_KEY);
         http.addHeader("Content-Type", "application/json");
         
@@ -1197,6 +1198,7 @@ void networkTaskCode(void * pvParameters) {
         HTTPClient http;
         String statusUrl = String(hardwareUrl) + "/status";
         http.begin(globalSecureClient, statusUrl);
+        http.addHeader("Connection", "close");
         http.addHeader("x-api-key", API_KEY);
         int httpCode = http.GET();
         if (httpCode == 200) {
@@ -1219,6 +1221,7 @@ void networkTaskCode(void * pvParameters) {
           }
         }
         http.end();
+        globalSecureClient.stop();
       }
     }
     vTaskDelay(50 / portTICK_PERIOD_MS); // Yield to other tasks
@@ -1415,9 +1418,11 @@ void checkRFID() {
 void resetServer() {
   HTTPClient http;
   http.begin(globalSecureClient, String(hardwareUrl) + "/reset");
+  http.addHeader("Connection", "close");
   http.addHeader("x-api-key", API_KEY);
   http.POST("");
   http.end();
+  globalSecureClient.stop();
 }
 
 void postEnrollResult(String identifier) {
@@ -1433,12 +1438,14 @@ void postEnrollResult(String identifier) {
   HTTPClient http;
   String url = String(hardwareUrl) + "/enroll_result";
   http.begin(globalSecureClient, url);
+  http.addHeader("Connection", "close");
   http.addHeader("x-api-key", API_KEY);
   http.addHeader("Content-Type", "application/json");
   
   String payload = "{\"identifier\":\"" + identifier + "\"}";
   http.POST(payload);
   http.end();
+  globalSecureClient.stop();
   
   currentMode = "attendance";
   resetScreen();
@@ -1594,6 +1601,7 @@ void syncFingerprints() {
   Serial.println("--- Starting Fingerprint Sync ---");
   HTTPClient http;
   http.begin(globalSecureClient, syncUrl);
+  http.addHeader("Connection", "close");
   http.addHeader("x-api-key", API_KEY);
   
   int httpCode = http.GET();
@@ -1633,4 +1641,5 @@ void syncFingerprints() {
     Serial.println("Failed to fetch sync data from server.");
   }
   http.end();
+  globalSecureClient.stop();
 }
