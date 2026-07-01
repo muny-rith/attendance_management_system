@@ -1534,20 +1534,20 @@ retry_first_scan:
     if (!success) goto timeout;
   }
   
-  // Step 2: Ask user to remove finger
+  // Step 2: Delay slightly to capture second image
   tft.fillRect(0, 100, 320, 140, ILI9341_BLACK);
   tft.setCursor(10, 110);
   tft.setTextColor(ILI9341_YELLOW);
-  tft.println("Remove finger...");
+  tft.println("Hold finger still...");
   
-  if (waitForFingerState(FINGERPRINT_NOFINGER, 15000) != FINGERPRINT_NOFINGER) goto timeout;
+  delay(1000); // Give 1 second delay to ensure a clean second scan
   
 retry_second_scan:
   // Step 3: Scan Second Image
   tft.fillRect(0, 100, 320, 140, ILI9341_BLACK);
   tft.setCursor(10, 110);
   tft.setTextColor(ILI9341_YELLOW);
-  tft.println("Place same finger again");
+  tft.println("Scanning again...");
   
   {
     unsigned long start = millis();
