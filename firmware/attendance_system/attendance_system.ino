@@ -1301,11 +1301,7 @@ void loop() {
     syncFingerprints();
     
     // Reset server back to attendance mode (sync is one-shot)
-    HTTPClient http;
-    http.begin(globalSecureClient, String(hardwareUrl) + "/reset");
-    http.addHeader("x-api-key", API_KEY);
-    http.POST("");
-    http.end();
+    resetServer();
     
     currentMode = "attendance";
     resetScreen();
@@ -1415,6 +1411,14 @@ void checkRFID() {
 
 // Functions removed for Offline-First architecture
 // Polling logic moved to Core 0
+
+void resetServer() {
+  HTTPClient http;
+  http.begin(globalSecureClient, String(hardwareUrl) + "/reset");
+  http.addHeader("x-api-key", API_KEY);
+  http.POST("");
+  http.end();
+}
 
 void postEnrollResult(String identifier) {
   if (WiFi.status() != WL_CONNECTED) return;
@@ -1574,7 +1578,13 @@ retry_second_scan:
   return;
 
 timeout:
+  tft.fillRect(0, 100, 320, 140, ILI9341_BLACK);
+  tft.setCursor(10, 110);
+  tft.setTextColor(ILI9341_RED);
+  tft.println("Timeout! Try again.");
+  delay(2000);
   currentMode = "attendance";
+  resetServer();
   resetScreen();
 }
 
