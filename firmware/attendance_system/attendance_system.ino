@@ -1135,9 +1135,9 @@ void resetScreen() {
   tft.fillScreen(ILI9341_BLACK);
   
   // Top Left: Moon Attendance (Smaller font to prevent overlap)
-  tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
   tft.setTextDatum(TL_DATUM);
-  tft.drawString("Moon Attendance", 10, 15, 2);
+  tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
+  tft.drawString("Moon Attendance", 30, 15, 2);
 
   // Left Side: 3x3 Dashed Scan Placeholder
   tft.setSwapBytes(true);
