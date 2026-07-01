@@ -16,9 +16,9 @@
 const char* API_KEY = "moon_attendance_secret_2026";
 
 // 2. Server URLs (Update these with your real server IP or domain)
-const char* serverUrl   = "http://192.168.100.16:3000/attendance";
-const char* hardwareUrl = "http://192.168.100.16:3000/hardware";
-const char* syncUrl     = "http://192.168.100.16:3000/employees/sync";
+const char* serverUrl   = "https://attendance-management-system-wk2p.onrender.com/attendance";
+const char* hardwareUrl = "https://attendance-management-system-wk2p.onrender.com/hardware";
+const char* syncUrl     = "https://attendance-management-system-wk2p.onrender.com/employees/sync";
 
 // 3. Time & Timezone Configuration
 const char* ntpServer          = "pool.ntp.org";
