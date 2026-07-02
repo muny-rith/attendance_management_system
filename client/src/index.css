@@ -645,3 +645,145 @@ body {
   box-shadow: none;
   cursor: not-allowed;
 }
+
+/* ==========================================================================
+   Responsive Design & Mobile Optimization
+   ========================================================================== */
+
+/* Improved smooth scrolling for containers */
+.table-container {
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 1rem 0.5rem;
+  }
+  
+  .glass-header {
+    padding: 1.25rem 1rem;
+    margin-bottom: 1.25rem;
+    border-radius: 12px;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .header-content h1 {
+    font-size: 1.5rem;
+  }
+  
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .export-btn, .status-indicator {
+    width: 100%;
+    justify-content: center;
+    padding: 0.875rem;
+    font-size: 1rem;
+  }
+
+  .tabs {
+    width: 100%;
+    display: flex;
+    margin-bottom: 1.25rem;
+  }
+  
+  .tab-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .main-content {
+    padding: 1.5rem 1rem;
+    border-radius: 12px;
+  }
+
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .table-header > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .table-header .export-btn {
+    width: 100%;
+  }
+
+  /* Full bleed tables on mobile for maximum space */
+  .table-container {
+    margin: 0 -1rem; 
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .attendance-table th, 
+  .attendance-table td {
+    padding: 0.75rem 1rem;
+  }
+
+  /* Employee Manager Forms */
+  .add-employee-form {
+    flex-direction: column;
+  }
+  
+  .add-employee-form input,
+  .add-employee-form select,
+  .add-employee-form button {
+    width: 100%;
+    padding: 0.875rem;
+  }
+  
+  .add-employee-form button {
+    margin-top: 0.5rem;
+  }
+
+  /* Mobile bottom-sheet style modal */
+  .modal-overlay {
+    padding: 0;
+    align-items: flex-end; 
+  }
+
+  .modal-content {
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 2rem 1.5rem 2.5rem;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .records-count {
+    margin-left: 0;
+    margin-top: 0.5rem;
+    display: inline-block;
+  }
+  
+  .table-header h2 {
+    font-size: 1.125rem;
+  }
+}
