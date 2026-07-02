@@ -35,7 +35,7 @@ exports.logAttendance = async (req, res) => {
 
     // Fetch the newly inserted log with the employee name to emit to the frontend
     const newLogQuery = await pool.query(`
-      SELECT al.id, al.timestamp, al.scanned_method, al.scanned_identifier, e.name, e.method, e.identifier 
+      SELECT al.id, TO_CHAR(al.timestamp, 'YYYY-MM-DD"T"HH24:MI:SS') as timestamp, al.scanned_method, al.scanned_identifier, e.name, e.method, e.identifier 
       FROM attendance_logs al 
       LEFT JOIN employees e ON al.employee_id = e.id 
       WHERE al.id = (SELECT MAX(id) FROM attendance_logs)
@@ -58,7 +58,7 @@ exports.getLogs = async (req, res) => {
     const result = await pool.query(`
       SELECT 
         al.id, 
-        al.timestamp,
+        TO_CHAR(al.timestamp, 'YYYY-MM-DD"T"HH24:MI:SS') as timestamp,
         al.scanned_method,
         al.scanned_identifier,
         e.name, 
