@@ -1,5 +1,6 @@
 import React from 'react';
-import { Fingerprint, CreditCard, Clock } from 'lucide-react';
+import { Fingerprint, CreditCard, Clock, HelpCircle } from 'lucide-react';
+import './AttendanceTable.css';
 
 const AttendanceTable = ({ logs, onRegisterClick }) => {
   return (
@@ -11,13 +12,14 @@ const AttendanceTable = ({ logs, onRegisterClick }) => {
             <th>Employee Name</th>
             <th>Method</th>
             <th>Identifier</th>
+            <th>Shift</th>
             <th>Time Scanned</th>
           </tr>
         </thead>
         <tbody>
           {logs.length === 0 ? (
             <tr>
-              <td colSpan="5" className="empty-state">No attendance logs found.</td>
+              <td colSpan="6" className="empty-state">No attendance logs found.</td>
             </tr>
           ) : (
             logs.map((log) => (
@@ -31,15 +33,24 @@ const AttendanceTable = ({ logs, onRegisterClick }) => {
                   )}
                 </td>
                 <td className="method-cell">
-                  {(log.method || log.scanned_method) === 'fingerprint' ? (
+                  {log.scanned_method === 'fingerprint' ? (
                     <span className="badge fingerprint"><Fingerprint size={16} /> Fingerprint</span>
-                  ) : (log.method || log.scanned_method) === 'rfid' ? (
+                  ) : log.scanned_method === 'rfid' ? (
                     <span className="badge rfid"><CreditCard size={16} /> RFID Card</span>
                   ) : (
                     <span className="badge unknown">Unknown</span>
                   )}
                 </td>
-                <td className="identifier">{log.identifier || log.scanned_identifier || '-'}</td>
+                <td className="identifier">{log.scanned_identifier || '-'}</td>
+                <td>
+                  {log.shift_title ? (
+                    <span className={`shift-badge shift-${log.shift_title.toLowerCase()}`}>
+                      {log.shift_title}
+                    </span>
+                  ) : (
+                    <span className="shift-badge shift-none">—</span>
+                  )}
+                </td>
                 <td className="timestamp">
                   <Clock size={16} className="clock-icon" />
                   {new Date(log.timestamp).toLocaleString()}

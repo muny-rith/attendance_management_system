@@ -1,4 +1,5 @@
-const API_KEY = "moon_attendance_secret_2026";
+require('dotenv').config();
+const API_KEY = process.env.API_KEY || "moon_attendance_secret_2026";
 
 const authMiddleware = (req, res, next) => {
   const apiKey = req.headers['x-api-key'];

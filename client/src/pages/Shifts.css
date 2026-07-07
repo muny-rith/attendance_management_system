@@ -1,0 +1,155 @@
+/* Shift Manager (Cards) */
+.shift-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.shift-card {
+  border: 1px solid;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.shift-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.shift-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.shift-card-icon {
+  font-size: 1.5rem;
+}
+
+.shift-card-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.shift-card-time {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.shift-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Shift Definitions Redesign (Clean & Accessible) */
+.shift-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0 2rem;
+}
+
+.shift-clean-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.shift-clean-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.shift-card-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.shift-card-header {
+  margin-bottom: 1.5rem;
+}
+
+.shift-card-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.shift-card-icon-clean {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.shift-clean-card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.shift-card-time-clean {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-top: auto;
+  margin-bottom: 1.5rem;
+}
+
+.shift-card-actions-clean {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding-top: 1rem;
+}
+
+.shift-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #ffffff;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.shift-action-btn.edit {
+  color: var(--text-secondary);
+}
+.shift-action-btn.edit:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.shift-action-btn.delete {
+  color: #ef4444;
+}
+.shift-action-btn.delete:hover {
+  background: #FEF2F2;
+  border-color: #FECACA;
+}

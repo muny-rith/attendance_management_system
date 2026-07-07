@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import { X, UserPlus } from 'lucide-react';
 import { addEmployee } from '../services/api';
+import './RegistrationModal.css';
 
 const RegistrationModal = ({ log, onClose, onRegisterSuccess }) => {
   const [name, setName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const identifier = log.scanned_identifier || log.identifier;
-  const method = log.scanned_method || log.method;
+  const scannedIdentifier = log.scanned_identifier || '';
+  const scannedMethod = log.scanned_method || 'rfid';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name) return;
     
     setIsSubmitting(true);
-    await addEmployee({ name, identifier, method });
+    await addEmployee({
+      name,
+      identifiers: [{ identifier: scannedIdentifier, method: scannedMethod, label: 'Primary' }],
+      shift_ids: []
+    });
     setIsSubmitting(false);
     onRegisterSuccess();
   };
@@ -30,11 +35,11 @@ const RegistrationModal = ({ log, onClose, onRegisterSuccess }) => {
         <div className="modal-details">
           <div className="detail-row">
             <span>Method:</span>
-            <strong>{method === 'rfid' ? 'RFID Card' : 'Fingerprint'}</strong>
+            <strong>{scannedMethod === 'rfid' ? 'RFID Card' : 'Fingerprint'}</strong>
           </div>
           <div className="detail-row">
             <span>Identifier:</span>
-            <strong className="identifier-text">{identifier}</strong>
+            <strong className="identifier-text">{scannedIdentifier}</strong>
           </div>
         </div>
 

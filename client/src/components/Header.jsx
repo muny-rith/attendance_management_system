@@ -1,19 +1,21 @@
 import React from 'react';
 import { Activity, Download } from 'lucide-react';
+import './Header.css';
 
 const Header = ({ logs = [] }) => {
   const exportToCSV = () => {
     if (logs.length === 0) return alert("No logs to export");
 
-    const headers = ["ID", "Employee Name", "Method", "Identifier", "Timestamp"];
+    const headers = ["ID", "Employee Name", "Method", "Identifier", "Shift", "Timestamp"];
     const csvRows = [headers.join(",")];
 
     logs.forEach(log => {
       const row = [
         log.id,
         `"${log.name || 'Unknown User'}"`,
-        log.method,
-        `"${log.identifier}"`,
+        log.scanned_method || '',
+        `"${log.scanned_identifier || ''}"`,
+        `"${log.shift_title || ''}"`,
         `"${new Date(log.timestamp).toLocaleString()}"`
       ];
       csvRows.push(row.join(","));

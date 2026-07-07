@@ -1,0 +1,52 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f5f7;
+  position: relative;
+}
+
+/* Sidebar — fixed, framer-motion controls width/x */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 100;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Main — framer-motion controls marginLeft */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* Mobile backdrop */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 99;
+}
+
+@media (max-width: 767px) {
+  .content {
+    padding: 16px;
+  }
+}

@@ -1,33 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { fetchEmployees, addEmployee, deleteEmployee, editEmployee, checkHardwareOnline, setHardwareMode } from '../services/api';
-import { Trash2, UserPlus, Pencil, X, CheckCircle, AlertCircle, RefreshCw, Cpu, Fingerprint, CreditCard } from 'lucide-react';
+import { fetchEmployees, fetchShifts, addEmployee, deleteEmployee, editEmployee, checkHardwareOnline, setHardwareMode } from '../services/api';
+import { Trash2, UserPlus, Pencil, X, CheckCircle, AlertCircle, RefreshCw, Cpu, Fingerprint, CreditCard, Plus, Clock } from 'lucide-react';
 import { io } from 'socket.io-client';
+import './Employees.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-
-const EmployeeManager = () => {
+const Employees = () => {
   const [employees, setEmployees] = useState([]);
+  const [shifts, setShifts] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Modal & Form state
   const [showModal, setShowModal] = useState(false);
-  const [enrollStep, setEnrollStep] = useState('none'); // 'checking', 'offline', 'select', 'scanning', 'final', 'edit'
-  
+  const [enrollStep, setEnrollStep] = useState('none');
+
   const [name, setName] = useState('');
-  const [identifier, setIdentifier] = useState('');
-  const [method, setMethod] = useState('fingerprint');
+  const [identifiers, setIdentifiers] = useState([{ identifier: '', method: 'fingerprint', label: '' }]);
+  const [selectedShiftIds, setSelectedShiftIds] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [statusMessage, setStatusMessage] = useState({ type: '', text: '' });
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
+  const [enrollingIndex, setEnrollingIndex] = useState(0); // which identifier slot is being enrolled
 
   useEffect(() => {
     loadEmployees();
+    loadShifts();
 
-    // Setup websocket listener for enrollment
     const socket = io(API_URL);
     socket.on('enroll_success', (data) => {
-      setIdentifier(data.identifier);
+      setIdentifiers(prev => {
+        const updated = [...prev];
+        updated[enrollingIndex] = { ...updated[enrollingIndex], identifier: data.identifier };
+        return updated;
+      });
       setEnrollStep('final');
     });
 
@@ -40,18 +46,23 @@ const EmployeeManager = () => {
     setLoading(false);
   };
 
+  const loadShifts = async () => {
+    const data = await fetchShifts();
+    setShifts(data);
+  };
+
   const openAddModal = async () => {
     setEditingId(null);
     setName('');
-    setIdentifier('');
-    setMethod('fingerprint');
+    setIdentifiers([{ identifier: '', method: 'fingerprint', label: '' }]);
+    setSelectedShiftIds([]);
     setStatusMessage({ type: '', text: '' });
     setShowModal(true);
-    
-    // Start active enrollment flow
+    setEnrollingIndex(0);
+
     setEnrollStep('checking');
     const { isOnline } = await checkHardwareOnline();
-    
+
     if (isOnline) {
       setEnrollStep('select');
     } else {
@@ -62,15 +73,18 @@ const EmployeeManager = () => {
   const handleEditClick = (emp) => {
     setEditingId(emp.id);
     setName(emp.name);
-    setIdentifier(emp.identifier);
-    setMethod(emp.method);
+    setIdentifiers(
+      emp.identifiers && emp.identifiers.length > 0
+        ? emp.identifiers.map(i => ({ identifier: i.identifier, method: i.method, label: i.label || '' }))
+        : [{ identifier: '', method: 'fingerprint', label: '' }]
+    );
+    setSelectedShiftIds(emp.shifts ? emp.shifts.map(s => s.shift_id) : []);
     setStatusMessage({ type: '', text: '' });
     setEnrollStep('edit');
     setShowModal(true);
   };
 
   const closeModal = async () => {
-    // If we were scanning, tell hardware to go back to normal
     if (enrollStep === 'scanning') {
       await setHardwareMode('attendance');
     }
@@ -78,32 +92,60 @@ const EmployeeManager = () => {
     setEnrollStep('none');
   };
 
-  const startScanning = async () => {
+  const startScanning = async (index) => {
+    setEnrollingIndex(index);
     setEnrollStep('scanning');
+    const method = identifiers[index]?.method || 'fingerprint';
     const hwMode = method === 'fingerprint' ? 'enroll_fingerprint' : 'enroll_rfid';
     await setHardwareMode(hwMode);
   };
 
+  // Identifier management
+  const addIdentifierSlot = () => {
+    setIdentifiers(prev => [...prev, { identifier: '', method: 'fingerprint', label: '' }]);
+  };
+
+  const removeIdentifierSlot = (index) => {
+    setIdentifiers(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const updateIdentifierField = (index, field, value) => {
+    setIdentifiers(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  // Shift toggling
+  const toggleShift = (shiftId) => {
+    setSelectedShiftIds(prev =>
+      prev.includes(shiftId) ? prev.filter(id => id !== shiftId) : [...prev, shiftId]
+    );
+  };
+
   const handleManualAddOrEdit = async (e) => {
     e.preventDefault();
-    if (!name || !identifier) return;
-    
+    const validIdentifiers = identifiers.filter(i => i.identifier.trim() !== '');
+    if (!name || validIdentifiers.length === 0) return;
+
     setIsSubmitting(true);
     setStatusMessage({ type: '', text: '' });
-    
+
     let result;
+    const payload = { name, identifiers: validIdentifiers, shift_ids: selectedShiftIds };
+
     if (editingId) {
-      result = await editEmployee(editingId, { name, identifier, method });
+      result = await editEmployee(editingId, payload);
     } else {
-      result = await addEmployee({ name, identifier, method });
+      result = await addEmployee(payload);
     }
-    
+
     setIsSubmitting(false);
 
     if (result && result.success !== false) {
       setStatusMessage({ type: 'success', text: editingId ? 'Employee updated successfully!' : 'Employee added successfully!' });
       loadEmployees();
-      // Close modal after a short delay
       setTimeout(() => {
         closeModal();
       }, 1500);
@@ -123,7 +165,50 @@ const EmployeeManager = () => {
     loadEmployees();
   };
 
-  // Render Modal Content based on enrollStep
+  // --- Identifier Input Row ---
+  const renderIdentifierRow = (ident, index, readOnly = false) => (
+    <div key={index} className="identifier-row">
+      <div className="identifier-row-fields">
+        <select
+          value={ident.method}
+          onChange={(e) => updateIdentifierField(index, 'method', e.target.value)}
+          disabled={readOnly}
+          className="ident-method-select"
+        >
+          <option value="fingerprint">Fingerprint</option>
+          <option value="rfid">RFID</option>
+        </select>
+        <input
+          type="text"
+          placeholder="Identifier (ID/UID)"
+          value={ident.identifier}
+          onChange={(e) => updateIdentifierField(index, 'identifier', e.target.value)}
+          required={index === 0}
+          readOnly={readOnly}
+          className="ident-value-input"
+        />
+        <input
+          type="text"
+          placeholder="Label (optional)"
+          value={ident.label}
+          onChange={(e) => updateIdentifierField(index, 'label', e.target.value)}
+          className="ident-label-input"
+        />
+        {!readOnly && (enrollStep === 'select' || enrollStep === 'final') && (
+          <button type="button" onClick={() => startScanning(index)} className="scan-hw-btn" title="Scan from hardware">
+            {ident.method === 'fingerprint' ? <Fingerprint size={16} /> : <CreditCard size={16} />}
+          </button>
+        )}
+        {identifiers.length > 1 && (
+          <button type="button" onClick={() => removeIdentifierSlot(index)} className="remove-ident-btn" title="Remove">
+            <X size={16} />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
+  // --- Modal Content ---
   const renderModalContent = () => {
     if (enrollStep === 'checking') {
       return (
@@ -141,9 +226,12 @@ const EmployeeManager = () => {
           <Cpu size={40} style={{ color: '#ef4444', marginBottom: '1rem' }} />
           <h3 style={{ color: '#ef4444' }}>Machine is Offline</h3>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-            We cannot initiate hardware enrollment because the machine is not responding. Please make sure it is powered on and connected to WiFi.
+            Cannot connect to the machine for enrollment. You can still add employees manually.
           </p>
-          <button onClick={closeModal} style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)', padding: '0.75rem 1.5rem', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+          <button onClick={() => setEnrollStep('final')} style={{ background: 'var(--accent-cyan)', color: '#000', padding: '0.75rem 1.5rem', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
+            Continue Manually
+          </button>
+          <button onClick={closeModal} style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)', padding: '0.75rem 1.5rem', borderRadius: '8px', border: '1px solid var(--glass-border)', marginLeft: '0.5rem', cursor: 'pointer' }}>
             Cancel
           </button>
         </div>
@@ -156,75 +244,34 @@ const EmployeeManager = () => {
           <h3 style={{ color: 'var(--accent-green)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
             <CheckCircle size={20} /> Machine is Online
           </h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>Select the authentication method to enroll:</p>
-          
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '2rem' }}>
-            <button 
-              type="button"
-              onClick={() => setMethod('fingerprint')}
-              style={{
-                flex: 1,
-                padding: '1.5rem',
-                borderRadius: '12px',
-                background: method === 'fingerprint' ? 'rgba(34, 211, 238, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                border: method === 'fingerprint' ? '1px solid var(--accent-cyan)' : '1px solid rgba(255, 255, 255, 0.1)',
-                color: method === 'fingerprint' ? 'var(--accent-cyan)' : 'var(--text-primary)',
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
-            >
-              <Fingerprint size={32} />
-              <span style={{ fontWeight: 600 }}>Fingerprint</span>
-            </button>
-
-            <button 
-              type="button"
-              onClick={() => setMethod('rfid')}
-              style={{
-                flex: 1,
-                padding: '1.5rem',
-                borderRadius: '12px',
-                background: method === 'rfid' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                border: method === 'rfid' ? '1px solid var(--accent-green)' : '1px solid rgba(255, 255, 255, 0.1)',
-                color: method === 'rfid' ? 'var(--accent-green)' : 'var(--text-primary)',
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
-            >
-              <CreditCard size={32} />
-              <span style={{ fontWeight: 600 }}>RFID Card</span>
-            </button>
-          </div>
-
-          <button onClick={startScanning} style={{ background: 'var(--accent-cyan)', color: '#000', padding: '0.75rem 2rem', borderRadius: '8px', fontWeight: 600, border: 'none', cursor: 'pointer', width: '100%' }}>
-            Start Enrollment
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>You can scan from hardware or enter identifiers manually.</p>
+          <button onClick={() => setEnrollStep('final')} style={{ background: 'var(--accent-cyan)', color: '#000', padding: '0.75rem 2rem', borderRadius: '8px', fontWeight: 600, border: 'none', cursor: 'pointer', width: '100%' }}>
+            Continue to Form
           </button>
         </div>
       );
     }
 
     if (enrollStep === 'scanning') {
+      const scanMethod = identifiers[enrollingIndex]?.method || 'fingerprint';
       return (
         <div style={{ textAlign: 'center', padding: '2rem' }}>
-          {method === 'fingerprint' ? (
+          {scanMethod === 'fingerprint' ? (
             <Fingerprint size={60} className="pulse-icon" style={{ color: 'var(--accent-cyan)', margin: '0 auto 1.5rem' }} />
           ) : (
             <CreditCard size={60} className="pulse-icon" style={{ color: 'var(--accent-green)', margin: '0 auto 1.5rem' }} />
           )}
           <h3 style={{ marginBottom: '1rem' }}>Waiting for Hardware...</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '1.1rem' }}>
-            {method === 'fingerprint' 
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '1.1rem' }}>
+            Scanning identifier slot #{enrollingIndex + 1}
+          </p>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
+            {scanMethod === 'fingerprint'
               ? 'Please follow the instructions on the physical machine screen to scan your finger.'
               : 'Please tap your RFID card on the physical machine now.'}
           </p>
-          <button onClick={closeModal} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '0.5rem 1.5rem', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)', cursor: 'pointer' }}>
-            Cancel Enrollment
+          <button onClick={() => setEnrollStep('final')} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '0.5rem 1.5rem', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)', cursor: 'pointer' }}>
+            Cancel Scanning
           </button>
         </div>
       );
@@ -233,13 +280,10 @@ const EmployeeManager = () => {
     if (enrollStep === 'final' || enrollStep === 'edit') {
       return (
         <div>
-          <h2>{editingId ? <Pencil size={24} /> : <UserPlus size={24} />} {editingId ? 'Edit Employee' : 'Complete Enrollment'}</h2>
-          
-          {enrollStep === 'final' && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-green)', background: 'rgba(16, 185, 129, 0.1)', padding: '0.75rem', borderRadius: '8px', marginBottom: '1.5rem', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
-              <CheckCircle size={20} /> Successfully scanned from hardware!
-            </div>
-          )}
+          <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            {editingId ? <Pencil size={24} /> : <UserPlus size={24} />}
+            {editingId ? 'Edit Employee' : 'Add Employee'}
+          </h2>
 
           {statusMessage.text && (
             <div style={{
@@ -259,38 +303,51 @@ const EmployeeManager = () => {
           )}
 
           <form className="register-form" onSubmit={handleManualAddOrEdit}>
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Authentication Method</label>
-              <select value={method} onChange={(e) => setMethod(e.target.value)} disabled={enrollStep === 'final'}>
-                <option value="rfid">RFID Card</option>
-                <option value="fingerprint">Fingerprint</option>
-              </select>
-            </div>
-            
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Identifier (ID/UID)</label>
-              <input 
-                type="text" 
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-                required 
-                readOnly={enrollStep === 'final'}
-                style={{ background: enrollStep === 'final' ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.05)' }}
-              />
-            </div>
-            
+            {/* Employee Name */}
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Employee Name</label>
-              <input 
-                type="text" 
-                placeholder="e.g. Alice Smith" 
+              <input
+                type="text"
+                placeholder="e.g. Alice Smith"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                required 
+                required
                 autoFocus
               />
             </div>
-            
+
+            {/* Identifiers */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                <label style={{ color: 'var(--text-secondary)' }}>Identifiers (Fingerprints / RFID Cards)</label>
+                <button type="button" onClick={addIdentifierSlot} className="add-ident-btn">
+                  <Plus size={14} /> Add
+                </button>
+              </div>
+              <div className="identifiers-list">
+                {identifiers.map((ident, index) => renderIdentifierRow(ident, index))}
+              </div>
+            </div>
+
+            {/* Shift Assignment */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Assigned Shifts</label>
+              <div className="shift-checkboxes">
+                {shifts.map(shift => (
+                  <label key={shift.id} className={`shift-checkbox ${selectedShiftIds.includes(shift.id) ? 'checked' : ''}`}>
+                    <input
+                      type="checkbox"
+                      checked={selectedShiftIds.includes(shift.id)}
+                      onChange={() => toggleShift(shift.id)}
+                    />
+                    <Clock size={14} />
+                    <span>{shift.title}</span>
+                    <small>{shift.start_time?.slice(0, 5)} - {shift.end_time?.slice(0, 5)}</small>
+                  </label>
+                ))}
+              </div>
+            </div>
+
             <button type="submit" disabled={isSubmitting} style={{ width: '100%' }}>
               {isSubmitting ? 'Saving...' : editingId ? 'Update Employee' : 'Save Employee'}
             </button>
@@ -298,12 +355,12 @@ const EmployeeManager = () => {
         </div>
       );
     }
-    
+
     return null;
   };
 
   return (
-    <div className="employee-manager">
+    <main className="main-content">
       <div className="table-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <h2>Registered Employees</h2>
@@ -320,8 +377,8 @@ const EmployeeManager = () => {
             <tr>
               <th>ID</th>
               <th>Name</th>
-              <th>Method</th>
-              <th>Identifier</th>
+              <th>Identifiers</th>
+              <th>Shifts</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -335,8 +392,34 @@ const EmployeeManager = () => {
                 <tr key={emp.id} className="table-row">
                   <td>#{emp.id}</td>
                   <td className="employee-name">{emp.name}</td>
-                  <td><span className={`badge ${emp.method}`}>{emp.method}</span></td>
-                  <td className="identifier">{emp.identifier}</td>
+                  <td className="identifiers-cell">
+                    {emp.identifiers && emp.identifiers.length > 0 ? (
+                      <div className="ident-chips">
+                        {emp.identifiers.map((ident, i) => (
+                          <span key={i} className={`ident-chip ${ident.method}`}>
+                            {ident.method === 'fingerprint' ? <Fingerprint size={12} /> : <CreditCard size={12} />}
+                            <span>{ident.identifier}</span>
+                            {ident.label && <small className="ident-chip-label">{ident.label}</small>}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-muted">None</span>
+                    )}
+                  </td>
+                  <td className="shifts-cell">
+                    {emp.shifts && emp.shifts.length > 0 ? (
+                      <div className="shift-badges-row">
+                        {emp.shifts.map((s, i) => (
+                          <span key={i} className={`shift-badge shift-${s.title.toLowerCase()}`}>
+                            {s.title}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-muted">Unassigned</span>
+                    )}
+                  </td>
                   <td className="action-cells">
                     <button onClick={() => handleEditClick(emp)} className="edit-btn" title="Edit Employee">
                       <Pencil size={16} />
@@ -362,14 +445,14 @@ const EmployeeManager = () => {
               Are you sure you want to delete <strong style={{ color: 'var(--text-primary)' }}>{employeeToDelete.name}</strong>? This will permanently remove their access and delete their biometric data from the machine.
             </p>
             <div style={{ display: 'flex', gap: '1rem' }}>
-              <button 
-                onClick={() => setEmployeeToDelete(null)} 
+              <button
+                onClick={() => setEmployeeToDelete(null)}
                 style={{ flex: 1, background: 'var(--bg-secondary)', color: 'var(--text-primary)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.1)', cursor: 'pointer' }}
               >
                 Cancel
               </button>
-              <button 
-                onClick={handleDelete} 
+              <button
+                onClick={handleDelete}
                 style={{ flex: 1, background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)', cursor: 'pointer', fontWeight: 600 }}
               >
                 Delete
@@ -388,8 +471,8 @@ const EmployeeManager = () => {
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 };
 
-export default EmployeeManager;
+export default Employees;

@@ -1,0 +1,63 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 0 20px;
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(219, 219, 219, 0.315);
+}
+
+.navbar__toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.836);
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.navbar__toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #3B82F6;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.navbar__email {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.836);
+  font-weight: 500;
+}
+
+@media (max-width: 767px) {
+  .navbar__email {
+    display: none;
+  }
+}

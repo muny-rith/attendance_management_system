@@ -7,18 +7,23 @@ require('dotenv').config();
 const attendanceRoutes = require('./routes/attendanceRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
 const hardwareRoutes = require('./routes/hardwareRoutes');
+const shiftRoutes = require('./routes/shiftRoutes');
 
 const app = express();
 const server = http.createServer(app);
+
+// Restrict to the configured frontend origin only
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+
 const io = new Server(server, {
   cors: {
-    origin: "*", // allow frontend to connect
-    methods: ["GET", "POST"]
+    origin: CLIENT_URL,
+    methods: ['GET', 'POST']
   }
 });
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: CLIENT_URL }));
 app.use(express.json());
 
 // Pass io to routes by attaching it to req
@@ -31,6 +36,7 @@ app.use((req, res, next) => {
 app.use('/attendance', attendanceRoutes);
 app.use('/employees', employeeRoutes);
 app.use('/hardware', hardwareRoutes);
+app.use('/shifts', shiftRoutes);
 
 // Socket.io connection handling
 io.on('connection', (socket) => {
