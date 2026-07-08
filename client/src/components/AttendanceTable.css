@@ -8,6 +8,7 @@
 .attendance-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .attendance-table th {
@@ -182,7 +183,70 @@
   }
 }
 
+
 @media (max-width: 768px) {
+
+  /* Decrease font sizes and padding for headers and cells */
+  .attendance-table th {
+    font-size: 0.7rem !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  .attendance-table td {
+    /* font-size: 0.75rem !important; */
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  /* Adjust employee name font size */
+  .employee-name {
+    font-size: 0.85rem !important;
+  }
+
+  /* Make identifier text and padding smaller */
+  .identifier {
+    font-size: 0.72rem !important;
+    padding: 0.15rem 0.4rem !important;
+  }
+
+  /* Make shift badges smaller */
+  .shift-badge {
+    font-size: 0.65rem !important;
+    padding: 0.15rem 0.4rem !important;
+  }
+
+  /* Make timestamps and clock icons fit better */
+  .timestamp {
+    font-size: 0.72rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Custom Column Widths (Desktop) */
+  .attendance-table th:nth-child(1) {
+    width: 80px;
+    /* ID column */
+  }
+
+  .attendance-table th:nth-child(2),
+  .attendance-table td:nth-child(2) {
+    width: 100px;
+    /* Employee Name column */
+  }
+
+
+
+
+
+  .attendance-table th:nth-child(5) {
+    width: 100px;
+    /* Shift column */
+  }
+
+  .attendance-table th:nth-child(6) {
+    width: 100px;
+    /* Time Scanned column */
+  }
 
   /* hide col method for both headers and cells */
   .attendance-table tr th:nth-child(1),
