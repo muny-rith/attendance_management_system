@@ -160,3 +160,47 @@
   color: var(--text-primary);
   box-shadow: var(--shadow-sm);
 }
+
+
+/* 1. Desktop Defaults */
+.time-short {
+  display: none;
+}
+
+.time-full {
+  display: inline;
+}
+
+/* 2. Mobile Layout Override */
+@media (max-width: 768px) {
+  .time-short {
+    display: inline;
+  }
+
+  .time-full {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* hide col method for both headers and cells */
+  .attendance-table tr th:nth-child(1),
+  .attendance-table tr td:nth-child(1) {
+    display: none !important;
+  }
+
+  .attendance-table tr th:nth-child(4),
+  .attendance-table tr td:nth-child(4) {
+    display: none !important;
+  }
+
+  .attendance-table tr th:nth-child(3),
+  .attendance-table tr td:nth-child(3) {
+    display: none !important;
+  }
+
+  .clock-icon {
+    display: none;
+  }
+}

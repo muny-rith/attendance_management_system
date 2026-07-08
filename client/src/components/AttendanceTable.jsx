@@ -53,8 +53,28 @@ const AttendanceTable = ({ logs, onRegisterClick }) => {
                 </td>
                 <td className="timestamp">
                   <Clock size={16} className="clock-icon" />
-                  {new Date(log.timestamp).toLocaleString()}
+                  <span className="time-full">
+                    {new Date(log.timestamp).toLocaleString('en-GB', {
+                      day: 'numeric',
+                      month: 'short',
+
+                      year: 'numeric',
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: false
+                    })}
+                  </span>
+                  <span className="time-short">
+                    {new Date(log.timestamp).toLocaleString('en-GB', {
+                      day: 'numeric',
+                      month: 'short',
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: false
+                    })}
+                  </span>
                 </td>
+
               </tr>
             ))
           )}

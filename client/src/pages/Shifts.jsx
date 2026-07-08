@@ -86,9 +86,9 @@ const Shifts = () => {
 
   const getShiftColor = (title) => {
     const t = title.toLowerCase();
-    if (t.includes('morning')) return { bg: '#FFFBEB', border: '#FDE68A', iconColor: '#F59E0B', icon: '🌅' };
-    if (t.includes('afternoon')) return { bg: '#FFF7ED', border: '#FED7AA', iconColor: '#EA580C', icon: '☀️' };
-    if (t.includes('evening') || t.includes('night')) return { bg: '#FAF5FF', border: '#E9D5FF', iconColor: '#9333EA', icon: '🌙' };
+    if (t.includes('morning')) return { bg: '#FFFBEB', border: '#d8c26bff', iconColor: '#F59E0B', icon: '🌅' };
+    if (t.includes('afternoon')) return { bg: '#fae3c8ff', border: '#c5a37bff', iconColor: '#EA580C', icon: '☀️' };
+    if (t.includes('evening') || t.includes('night')) return { bg: '#af7bcfff', border: '#563a74ff', iconColor: '#9333EA', icon: '🌙' };
     return { bg: '#F0FDF4', border: '#BBF7D0', iconColor: '#16A34A', icon: '⏰' };
   };
 
@@ -99,7 +99,7 @@ const Shifts = () => {
           <h2>Shift Definitions</h2>
           <div className="records-count">{shifts.length} Shifts</div>
         </div>
-        <button onClick={openAddModal} className="export-btn" style={{ background: 'var(--accent-cyan)', borderColor: 'rgba(34, 211, 238, 0.3)', color: '#000' }}>
+        <button onClick={openAddModal} className="export-btn" style={{ background: 'var(--accent-cyan)', borderColor: 'rgba(34, 211, 238, 0.3)', color: '#ffffffff' }}>
           <Plus size={18} /> Add Shift
         </button>
       </div>
@@ -114,7 +114,7 @@ const Shifts = () => {
             const colors = getShiftColor(shift.title);
             return (
               <div key={shift.id} className="shift-clean-card" style={{ background: colors.bg, borderColor: colors.border }}>
-                
+
                 <div className="shift-card-content">
                   <div className="shift-card-header">
                     <div className="shift-card-title-wrap">
@@ -122,12 +122,12 @@ const Shifts = () => {
                       <h3>{shift.title}</h3>
                     </div>
                   </div>
-                  
+
                   <div className="shift-card-time-clean">
-                    <Clock size={18} />
+                    <Clock size={24} />
                     <span>{shift.start_time?.slice(0, 5)} — {shift.end_time?.slice(0, 5)}</span>
                   </div>
-                  
+
                   <div className="shift-card-actions-clean">
                     <button onClick={() => openEditModal(shift)} className="shift-action-btn edit" title="Edit Shift">
                       <Pencil size={16} />
