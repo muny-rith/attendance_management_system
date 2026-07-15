@@ -8,6 +8,7 @@ const attendanceRoutes = require('./routes/attendanceRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
 const hardwareRoutes = require('./routes/hardwareRoutes');
 const shiftRoutes = require('./routes/shiftRoutes');
+const statusRoutes = require('./routes/statusRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -37,6 +38,7 @@ app.use('/attendance', attendanceRoutes);
 app.use('/employees', employeeRoutes);
 app.use('/hardware', hardwareRoutes);
 app.use('/shifts', shiftRoutes);
+app.use('/status', statusRoutes);
 
 // Socket.io connection handling
 io.on('connection', (socket) => {
