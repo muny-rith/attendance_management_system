@@ -952,8 +952,11 @@ const uint16_t icon_wifi_off[1024] PROGMEM = {
 
 TFT_eSPI tft = TFT_eSPI(); 
 
-#define RFID_CS  5
-#define RFID_RST 27
+#define RFID_CS   5
+#define RFID_RST  27
+#define RFID_SCK  14
+#define RFID_MOSI 13
+#define RFID_MISO 26
 MFRC522 rfid(RFID_CS, RFID_RST);
 
 HardwareSerial mySerial(2);
@@ -1004,9 +1007,6 @@ void setup() {
   Serial.begin(115200);
   Serial.println("\n--- ATTENDANCE SYSTEM BOOT ---");
 
-  pinMode(15, OUTPUT);
-  digitalWrite(15, HIGH); // deselect TFT CS so it doesn't interfere with RC522 on shared SPI bus
-
   tft.begin();
   tft.setRotation(1);
   tft.fillScreen(ILI9341_BLACK);
@@ -1015,7 +1015,8 @@ void setup() {
   tft.setCursor(10, 10);
   tft.println("Booting...");
 
-  SPI.begin();
+  // Initialize dedicated SPI bus for RFID (independent from TFT)
+  SPI.begin(RFID_SCK, RFID_MISO, RFID_MOSI, RFID_CS);
   
   tft.print("RTC: ");
   Serial.print("RTC: ");
