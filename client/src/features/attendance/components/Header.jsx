@@ -46,11 +46,6 @@ const Header = ({ logs = [], onExport, isExporting = false }) => {
         </h1>
 
         <div className="header-actions">
-          <button className="export-btn" onClick={exportToCSV} disabled={isExporting}>
-            {isExporting ? <Loader2 size={16} className="spinner" /> : <Download size={16} />}
-            {isExporting ? 'Exporting...' : 'Export CSV'}
-          </button>
-
           <div className="status-indicator">
             <Activity size={18} className="pulse-icon" />
             <span>Live Sync</span>
