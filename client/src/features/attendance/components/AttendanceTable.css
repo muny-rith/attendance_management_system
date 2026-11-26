@@ -1,0 +1,328 @@
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid var(--glass-border);
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.attendance-table th {
+  text-align: left;
+  padding: 0.75rem 1.5rem;
+  background: #F9FAFB;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--glass-border);
+  white-space: nowrap;
+}
+
+.table-row {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--glass-border);
+  transition: background-color 0.15s ease;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.attendance-table td {
+  padding: 1rem 1.5rem;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.table-row:hover {
+  background-color: #F9FAFB;
+}
+
+.employee-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge.fingerprint {
+  background: #EFF6FF;
+  color: var(--accent-cyan);
+  border: 1px solid #BFDBFE;
+}
+
+.badge.rfid {
+  background: #ECFDF5;
+  color: var(--accent-green);
+  border: 1px solid #A7F3D0;
+}
+
+.badge.unknown {
+  background: #FEF2F2;
+  color: var(--accent-danger);
+  border: 1px solid #FECACA;
+}
+
+/* Screen < 1200px: Show icon only for Method badges with clean width */
+@media (max-width: 1200px) {
+  .badge .badge-text {
+    display: none;
+  }
+
+  .badge {
+    padding: 0;
+    gap: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+  }
+
+  .badge svg {
+    margin: 0 auto;
+    flex-shrink: 0;
+  }
+
+  .attendance-table th:nth-child(3),
+  .attendance-table td:nth-child(3) {
+    width: 95px !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    text-align: center;
+  }
+}
+
+.identifier {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  background: #F3F4F6;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--glass-border);
+}
+
+.empty-state {
+  text-align: center !important;
+  padding: 2.5rem 1rem !important;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .attendance-table tr td.empty-state {
+    display: table-cell !important;
+  }
+}
+
+.timestamp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.clock-icon {
+  color: var(--text-secondary);
+}
+
+/* Header Actions & Export */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #FFFFFF;
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.export-btn:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+}
+
+/* Tabs */
+.tabs {
+  display: inline-flex;
+  background: #F3F4F6;
+  padding: 0.25rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.15s ease;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: #FFFFFF;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+
+/* 1. Desktop Defaults (>= 1200px) */
+.time-short {
+  display: none;
+}
+
+.time-full {
+  display: inline;
+}
+
+/* 2. Screens < 1200px (Tablets & Mobile): Show Short Date & Time (e.g., "2 Nov, 17:09" without year) */
+@media (max-width: 1200px) {
+  .time-short {
+    display: inline;
+  }
+
+  .time-full {
+    display: none;
+  }
+}
+
+
+@media (max-width: 768px) {
+
+  /* Decrease font sizes and padding for headers and cells */
+  .attendance-table th {
+    font-size: 0.7rem !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  .attendance-table td {
+    /* font-size: 0.75rem !important; */
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  /* Adjust employee name font size */
+  .employee-name {
+    font-size: 0.85rem !important;
+  }
+
+  /* Make identifier text and padding smaller */
+  .identifier {
+    font-size: 0.72rem !important;
+    padding: 0.15rem 0.4rem !important;
+  }
+
+  /* Make shift badges smaller */
+  .shift-badge {
+    font-size: 0.65rem !important;
+    padding: 0.15rem 0.4rem !important;
+  }
+
+  /* Make timestamps and clock icons fit better */
+  .empty-state {
+  text-align: center !important;
+  padding: 2.5rem 1rem !important;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .attendance-table tr td.empty-state {
+    display: table-cell !important;
+  }
+}
+
+.timestamp {
+    font-size: 0.72rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Custom Column Widths (Desktop) */
+  .attendance-table th:nth-child(1) {
+    width: 80px;
+    /* ID column */
+  }
+
+  .attendance-table th:nth-child(2),
+  .attendance-table td:nth-child(2) {
+    width: 100px;
+    /* Employee Name column */
+  }
+
+
+
+
+
+  .attendance-table th:nth-child(5) {
+    width: 100px;
+    /* Shift column */
+  }
+
+  .attendance-table th:nth-child(6) {
+    width: 100px;
+    /* Time Scanned column */
+  }
+
+  /* hide col method for both headers and cells */
+  .attendance-table tr th:nth-child(1),
+  .attendance-table tr td:nth-child(1) {
+    display: none !important;
+  }
+
+  .attendance-table tr th:nth-child(4),
+  .attendance-table tr td:nth-child(4) {
+    display: none !important;
+  }
+
+  .attendance-table tr th:nth-child(3),
+  .attendance-table tr td:nth-child(3) {
+    display: none !important;
+  }
+
+  .clock-icon {
+    display: none;
+  }
+}

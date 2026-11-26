@@ -1,0 +1,210 @@
+.presence-board-wrapper {
+  margin-bottom: 2rem;
+}
+
+.presence-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.presence-counters-bar {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  -webkit-overflow-scrolling: touch;
+}
+
+.presence-counters-bar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.counter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 9999px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.counter-pill:hover {
+  background: #F9FAFB;
+  color: var(--text-primary);
+}
+
+.counter-pill.active {
+  background: #2563EB;
+  color: #FFFFFF;
+  border-color: #2563EB;
+}
+
+.counter-on-campus.active {
+  background: #059669;
+  border-color: #059669;
+}
+
+.counter-not-arrived.active {
+  background: #D97706;
+  border-color: #D97706;
+}
+
+.counter-upcoming.active {
+  background: #4B5563;
+  border-color: #4B5563;
+}
+
+.counter-checked-out.active {
+  background: #3B82F6;
+  border-color: #3B82F6;
+}
+
+.live-dot-green {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+}
+
+.refresh-btn-subtle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.refresh-btn-subtle:hover {
+  background: #F3F4F6;
+}
+
+/* Cards Grid */
+.presence-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.presence-card {
+  background: #FFFFFF;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.presence-card:hover {
+  border-color: #CBD5E1;
+}
+
+.card-on-campus {
+  border-left: 3px solid #10B981;
+}
+
+.card-absent {
+  border-left: 3px solid #F59E0B;
+}
+
+.card-upcoming {
+  border-left: 3px solid #9CA3AF;
+}
+
+.card-checked-out {
+  border-left: 3px solid #3B82F6;
+}
+
+.presence-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.presence-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #EEF2FF;
+  color: #4338CA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.presence-status-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10B981;
+  border: 2px solid #FFFFFF;
+}
+
+.presence-card-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.presence-staff-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.presence-staff-role {
+  font-size: 0.71875rem;
+  color: var(--text-secondary);
+}
+
+.presence-status-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.6rem;
+  background: #F9FAFB;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.presence-status-text {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.presence-activity-badge {
+  background: #DBEAFE;
+  color: #1E40AF;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}

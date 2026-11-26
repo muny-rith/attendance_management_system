@@ -1,0 +1,330 @@
+/* Employee Manager */
+.add-employee-card {
+  background: #F9FAFB;
+  border: 1px dashed #D1D5DB;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  transition: border-color 0.2s ease;
+}
+
+.add-employee-card:hover {
+  border-color: #9CA3AF;
+}
+
+.add-employee-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.add-employee-form {
+  display: flex;
+  gap: 1rem;
+}
+
+.add-employee-form input,
+.add-employee-form select {
+  flex: 1;
+  background: #FFFFFF;
+  border: 1px solid var(--glass-border);
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.add-employee-form input:focus,
+.add-employee-form select:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.add-employee-form button {
+  background: var(--accent-cyan);
+  color: #FFFFFF;
+  border: none;
+  padding: 0 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.add-employee-form button:hover {
+  background: var(--accent-cyan-hover);
+}
+
+.action-cells {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.delete-btn,
+.edit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.delete-btn {
+  background: #FEF2F2;
+  color: var(--accent-danger);
+  border-color: #FECACA;
+}
+
+.delete-btn:hover {
+  background: #FEE2E2;
+}
+
+.edit-btn {
+  background: #F3F4F6;
+  color: var(--text-secondary);
+  border-color: var(--glass-border);
+}
+
+.edit-btn:hover {
+  background: #E5E7EB;
+  color: var(--text-primary);
+}
+
+.cancel-btn {
+  background: #FFFFFF !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--glass-border) !important;
+  font-weight: 500 !important;
+}
+
+.cancel-btn:hover {
+  background: #F9FAFB !important;
+  color: var(--text-primary) !important;
+}
+
+.add-employee-card.editing {
+  border-color: var(--accent-cyan);
+  background: #EFF6FF;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem !important;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 4rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Inline Register Button */
+.unknown-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.text-unknown {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.register-inline-btn {
+  background: #FFFFFF;
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.register-inline-btn:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+}
+
+/* Multi-Identifier Form (Add/Edit Modal) */
+.identifiers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.identifier-row {
+  background: #F8FAFC;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.2s;
+}
+
+.identifier-row:hover {
+  border-color: #CBD5E1;
+}
+
+.identifier-row-fields {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.ident-method-select {
+  /* width: ; */
+  /* min-width: 100px; */
+  flex-shrink: 0;
+  padding: 0.5rem !important;
+  font-size: 0.8rem !important;
+  /* align-self: flex-start; */
+}
+
+.ident-value-input {
+  flex: 1.5;
+  min-width: 80px;
+  padding: 0.5rem !important;
+  font-size: 0.8rem !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.ident-label-input {
+  flex: 1;
+  min-width: 60px;
+  padding: 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+.add-ident-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #EFF6FF;
+  color: #2563EB;
+  border: 1px solid #BFDBFE;
+  padding: 0.35rem 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.add-ident-btn:hover {
+  background: #DBEAFE;
+}
+
+.remove-ident-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.remove-ident-btn:hover {
+  background: #FEE2E2;
+}
+
+.scan-hw-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.scan-hw-btn:hover {
+  background: #D1FAE5;
+}
+
+/* Shift Checkboxes (Employee Form) */
+.shift-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.shift-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  background: #F8FAFC;
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.shift-checkbox:hover {
+  border-color: #CBD5E1;
+  background: #F1F5F9;
+}
+
+.shift-checkbox.checked {
+  background: #EFF6FF;
+  border-color: #3B82F6;
+  color: #1E40AF;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+}
+
+.shift-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.shift-checkbox small {
+  color: #9CA3AF;
+  font-weight: 400;
+  margin-left: 0.2rem;
+}
+
+.shift-checkbox.checked small {
+  color: #93C5FD;
+}
+
+.employee-manager .modal-content {
+  max-width: 520px;
+}

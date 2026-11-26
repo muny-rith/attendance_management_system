@@ -1,0 +1,461 @@
+/* ==========================================================================
+   DateRangeFilter Component - Primary Design System Styles
+   Seamlessly binds to --accent-cyan, --glass-border, --bg-secondary, etc.
+   ========================================================================== */
+
+/* DateRangeFilter Container */
+.drf-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Trigger Button */
+.drf-trigger-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  font-size: 13px;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.drf-trigger-btn:hover {
+  border-color: #9CA3AF;
+  color: var(--text-primary);
+}
+
+.drf-trigger-btn.is-filtered {
+  border-color: var(--primary-border, rgba(37, 99, 235, 0.35));
+  background-color: var(--primary-subtle, rgba(37, 99, 235, 0.08));
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+.drf-trigger-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.drf-trigger-icon {
+  color: var(--text-secondary);
+  transition: color 0.15s ease;
+}
+
+.drf-trigger-btn.is-filtered .drf-trigger-icon {
+  color: var(--accent-cyan);
+}
+
+.drf-chevron {
+  color: #94a3b8;
+  transition: transform 0.2s ease, color 0.15s ease;
+}
+
+.drf-trigger-btn.is-filtered .drf-chevron {
+  color: var(--accent-cyan);
+}
+
+/* Dropdown Card */
+.drf-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.12), 0 8px 12px -4px rgba(0, 0, 0, 0.06);
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  z-index: 100;
+  overflow: hidden;
+  animation: drfFadeInScale 0.15s ease-out;
+}
+
+.drf-dropdown.align-right {
+  right: 0;
+}
+
+.drf-dropdown.align-left {
+  left: 0;
+}
+
+/* Dropdown Header */
+.drf-header {
+  padding: 10px 14px;
+  background-color: #F9FAFB;
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drf-header-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.drf-clear-btn {
+  font-size: 11px;
+  color: var(--accent-danger);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  transition: opacity 0.15s;
+}
+
+.drf-clear-btn:hover {
+  opacity: 0.8;
+}
+
+/* Presets List */
+.drf-presets-list {
+  padding: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.drf-preset-item {
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-secondary);
+  background-color: transparent;
+  font-weight: 400;
+  transition: all 0.12s ease;
+}
+
+.drf-preset-item:hover {
+  background-color: #F3F4F6;
+  color: var(--text-primary);
+}
+
+.drf-preset-item.active {
+  color: var(--accent-cyan);
+  background-color: var(--primary-subtle, rgba(37, 99, 235, 0.08));
+  font-weight: 600;
+}
+
+.drf-preset-item-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drf-preset-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: #F1F5F9;
+  color: var(--text-secondary);
+  font-weight: 600;
+  transition: all 0.12s ease;
+}
+
+.drf-preset-item.active .drf-preset-badge {
+  background-color: var(--primary-border, rgba(37, 99, 235, 0.18));
+  color: var(--accent-cyan);
+}
+
+.drf-check-icon {
+  color: var(--accent-cyan);
+}
+
+/* Embedded Calendar Section */
+.drf-calendar-section {
+  padding: 12px 14px;
+  background-color: #F9FAFB;
+  border-top: 1px solid var(--glass-border);
+}
+
+.drf-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.drf-calendar-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.drf-nav-group {
+  display: flex;
+  gap: 4px;
+}
+
+.drf-nav-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  padding: 3px 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all 0.15s ease;
+}
+
+.drf-nav-btn:hover {
+  border-color: #9CA3AF;
+  color: var(--text-primary);
+}
+
+.drf-weekdays-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.drf-weekday {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  opacity: 0.75;
+  padding: 3px 0;
+  text-transform: uppercase;
+}
+
+.drf-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px 0;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.drf-day-btn {
+  border: none;
+  padding: 6px 0;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  width: 100%;
+  background: transparent;
+  color: var(--text-primary);
+  border-radius: 4px;
+}
+
+.drf-day-btn:hover:not(.range-start):not(.range-end):not(.range-between) {
+  background-color: #E5E7EB;
+}
+
+.drf-day-btn.range-start {
+  background-color: var(--accent-cyan);
+  color: #FFFFFF !important;
+  font-weight: 700;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.drf-day-btn.range-end {
+  background-color: var(--accent-cyan);
+  color: #FFFFFF !important;
+  font-weight: 700;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.drf-day-btn.range-start.range-end,
+.drf-day-btn.range-single {
+  border-radius: 6px !important;
+}
+
+.drf-day-btn.range-between {
+  background-color: var(--primary-subtle, rgba(37, 99, 235, 0.09));
+  color: var(--accent-cyan);
+  font-weight: 600;
+  border-radius: 0;
+}
+
+.drf-day-btn.range-between:hover {
+  background-color: var(--primary-border, rgba(37, 99, 235, 0.18));
+}
+
+/* Range Summary */
+.drf-summary-box {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  text-align: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.drf-summary-box strong {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+/* Actions */
+.drf-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.drf-apply-btn {
+  flex: 1;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: var(--accent-cyan);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.drf-apply-btn:hover:not(:disabled) {
+  background-color: var(--accent-cyan-hover);
+}
+
+.drf-apply-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.drf-reset-btn {
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.drf-reset-btn:hover {
+  background-color: #F1F5F9;
+  color: var(--text-primary);
+  border-color: #9CA3AF;
+}
+
+@keyframes drfFadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .drf-container {
+    width: auto;
+  }
+
+  .drf-trigger-btn {
+    width: auto;
+    padding: 0 6px;
+  }
+
+  /* Requirement 1: On mobile screen, just show the calendar directly */
+  .drf-presets-list {
+    display: none !important;
+  }
+
+  .drf-calendar-section {
+    border-top: none !important;
+    padding: 10px 12px !important;
+  }
+
+  /* Dropdown sizing and alignment on mobile so it never clips off-screen */
+  .drf-dropdown {
+    width: 280px !important;
+    max-width: calc(100vw - 20px) !important;
+    right: 0 !important;
+    left: auto !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+    z-index: 1000 !important;
+  }
+
+  .drf-label-full {
+    display: none !important;
+  }
+
+  .drf-label-short {
+    display: inline !important;
+  }
+
+  .drf-chevron {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .drf-label-full {
+    display: inline;
+  }
+
+  .drf-label-short {
+    display: none;
+  }
+}
+
+/* Single Mode Footer */
+.drf-single-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 6px;
+  margin-top: 4px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.drf-today-btn {
+  background: transparent;
+  border: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: opacity 0.15s;
+}
+
+.drf-today-btn:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}

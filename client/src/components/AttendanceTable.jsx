@@ -9,11 +9,11 @@ const AttendanceTable = ({ logs, onRegisterClick }) => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Employee Name</th>
+            <th>Name</th>
             <th>Method</th>
             <th>Identifier</th>
             <th>Shift</th>
-            <th>Time Scanned</th>
+            <th>Time</th>
           </tr>
         </thead>
         <tbody>
@@ -34,17 +34,26 @@ const AttendanceTable = ({ logs, onRegisterClick }) => {
                 </td>
                 <td className="method-cell">
                   {log.scanned_method === 'fingerprint' ? (
-                    <span className="badge fingerprint"><Fingerprint size={16} /> Fingerprint</span>
+                    <span className="badge fingerprint" title="Fingerprint">
+                      <Fingerprint size={16} />
+                      <span className="badge-text">Fingerprint</span>
+                    </span>
                   ) : log.scanned_method === 'rfid' ? (
-                    <span className="badge rfid"><CreditCard size={16} /> RFID Card</span>
+                    <span className="badge rfid" title="RFID Card">
+                      <CreditCard size={16} />
+                      <span className="badge-text">RFID Card</span>
+                    </span>
                   ) : (
-                    <span className="badge unknown">Unknown</span>
+                    <span className="badge unknown" title="Unknown">
+                      <HelpCircle size={16} />
+                      <span className="badge-text">Unknown</span>
+                    </span>
                   )}
                 </td>
                 <td className="identifier">{log.scanned_identifier || '-'}</td>
                 <td>
                   {log.shift_title ? (
-                    <span className={`shift-badge shift-${log.shift_title.toLowerCase()}`}>
+                    <span className={`shift-badge shift-${log.shift_title.toLowerCase().replace(/\s+/g, '-')}`}>
                       {log.shift_title}
                     </span>
                   ) : (

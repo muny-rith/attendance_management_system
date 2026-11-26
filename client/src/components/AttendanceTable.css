@@ -21,6 +21,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border-bottom: 1px solid var(--glass-border);
+  white-space: nowrap;
 }
 
 .table-row {
@@ -77,6 +78,37 @@
   background: #FEF2F2;
   color: var(--accent-danger);
   border: 1px solid #FECACA;
+}
+
+/* Screen < 1200px: Show icon only for Method badges with clean width */
+@media (max-width: 1200px) {
+  .badge .badge-text {
+    display: none;
+  }
+
+  .badge {
+    padding: 0;
+    gap: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+  }
+
+  .badge svg {
+    margin: 0 auto;
+    flex-shrink: 0;
+  }
+
+  .attendance-table th:nth-child(3),
+  .attendance-table td:nth-child(3) {
+    width: 95px !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    text-align: center;
+  }
 }
 
 .identifier {
@@ -163,7 +195,7 @@
 }
 
 
-/* 1. Desktop Defaults */
+/* 1. Desktop Defaults (>= 1200px) */
 .time-short {
   display: none;
 }
@@ -172,8 +204,8 @@
   display: inline;
 }
 
-/* 2. Mobile Layout Override */
-@media (max-width: 768px) {
+/* 2. Screens < 1200px (Tablets & Mobile): Show Short Date & Time (e.g., "2 Nov, 17:09" without year) */
+@media (max-width: 1200px) {
   .time-short {
     display: inline;
   }

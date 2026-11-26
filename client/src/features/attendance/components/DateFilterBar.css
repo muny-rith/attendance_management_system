@@ -1,0 +1,160 @@
+/* Compact Single-Row Filter Toolbar */
+.filter-toolbar {
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+
+/* Search Box */
+.search-box {
+  position: relative;
+  flex: 1;
+  max-width: 320px;
+  min-width: 220px;
+}
+
+.search-box input {
+  width: 100%;
+  height: 36px;
+  padding: 0 0.75rem 0 2.25rem;
+  background: #F9FAFB;
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.search-box input:focus {
+  background: #FFFFFF;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.12);
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+/* Controls Group */
+.filter-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Daily Filter Control (Arrow + MoonPulse Date Picker) */
+.daily-filter-control {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.date-nav-arrow {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.date-nav-arrow:hover {
+  background: #F9FAFB;
+  color: var(--text-primary);
+  border-color: #9CA3AF;
+}
+
+/* Mobile Responsive: Single Row 75% Search / 25% Date */
+@media (max-width: 768px) {
+  .filter-toolbar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.625rem;
+    gap: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* 75% Width for Search Input */
+  .search-box {
+    flex: 0 0 calc(75% - 0.25rem);
+    max-width: none;
+    min-width: 0;
+  }
+
+  .search-box input {
+    height: 36px;
+    font-size: 0.75rem;
+    padding: 0 0.5rem 0 1.85rem;
+  }
+
+  .search-icon {
+    left: 0.55rem;
+    width: 14px;
+    height: 14px;
+  }
+
+  /* 25% Width for Date Control */
+  .filter-controls-group {
+    flex: 0 0 calc(25% - 0.25rem);
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .daily-filter-control {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  /* Hide arrow buttons on mobile to fit 25% space */
+  .date-nav-arrow {
+    display: none !important;
+  }
+
+  /* Make date button fill the 25% block */
+  .daily-filter-control .drf-container,
+  .filter-controls-group .drf-container {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .daily-filter-control .drf-trigger-btn,
+  .filter-controls-group .drf-trigger-btn {
+    width: 100%;
+    min-width: 0;
+    height: 36px;
+    padding: 0 6px;
+    font-size: 0.75rem;
+    justify-content: center;
+    gap: 4px;
+    box-sizing: border-box;
+  }
+}
