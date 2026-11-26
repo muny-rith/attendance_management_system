@@ -161,7 +161,7 @@ textarea {
   }
 
   .table-header h2 {
-    font-size: 1.125rem;
+    font-size: 14px;
     margin: 0;
   }
 
@@ -233,12 +233,6 @@ textarea {
   100% {
     transform: translateY(0);
     opacity: 1;
-  }
-}
-
-@media (max-width: 480px) {
-  .table-header h2 {
-    font-size: 1.05rem;
   }
 }
 
