@@ -96,10 +96,10 @@ const Shifts = () => {
     <main className="main-content">
       <div className="table-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <h2>Shift Definitions</h2>
-          <div className="records-count">{shifts.length} Shifts</div>
+          <h2 className='page-title'>Shift Definitions</h2>
+          {/* <div className="records-count">{shifts.length} Shifts</div> */}
         </div>
-        <button onClick={openAddModal} className="export-btn" style={{ background: 'var(--accent-cyan)', borderColor: 'rgba(34, 211, 238, 0.3)', color: '#ffffffff' }}>
+        <button onClick={openAddModal} className="add-btn">
           <Plus size={18} /> Add Shift
         </button>
       </div>

@@ -372,12 +372,12 @@ const Employees = () => {
   return (
     <main className="main-content">
       <div className="table-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <h2>Registered Employees</h2>
-          <div className="records-count">{employees.length} Employees</div>
+        <div>
+          <h2 className='page-title'>Employees</h2>
+          {/* <div className="records-count">{employees.length} Employees</div> */}
         </div>
-        <button onClick={openAddModal} className="export-btn" style={{ background: 'var(--accent-green)', borderColor: 'rgba(16, 185, 129, 0.3)', color: '#fff' }}>
-          <UserPlus size={18} /> Add Employee
+        <button onClick={openAddModal} className="add-btn">
+          <UserPlus size={18} /> Add
         </button>
       </div>
 

@@ -1,4 +1,8 @@
 /* Employee Manager */
+.page-title {
+  font-size: 18px !important;
+}
+
 .add-employee-card {
   background: #F9FAFB;
   border: 1px dashed #D1D5DB;
@@ -68,6 +72,23 @@
 .action-cells {
   display: flex;
   gap: 0.5rem;
+}
+
+.add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* width: 32px; */
+  padding: 0px 24px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: var(--accent-green);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #fff;
+  gap: 6px;
 }
 
 .delete-btn,
