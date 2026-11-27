@@ -204,15 +204,19 @@ const Employees = () => {
           onChange={(e) => updateIdentifierField(index, 'label', e.target.value)}
           className="ident-label-input"
         />
-        {!readOnly && (enrollStep === 'select' || enrollStep === 'final') && (
-          <button type="button" onClick={() => startScanning(index)} className="scan-hw-btn" title="Scan from hardware">
-            {ident.method === 'fingerprint' ? <Fingerprint size={16} /> : <CreditCard size={16} />}
-          </button>
-        )}
-        {identifiers.length > 1 && (
-          <button type="button" onClick={() => removeIdentifierSlot(index)} className="remove-ident-btn" title="Remove">
-            <X size={16} />
-          </button>
+        {( (!readOnly && (enrollStep === 'select' || enrollStep === 'final')) || identifiers.length > 1 ) && (
+          <div className="ident-row-actions">
+            {!readOnly && (enrollStep === 'select' || enrollStep === 'final') && (
+              <button type="button" onClick={() => startScanning(index)} className="scan-hw-btn" title="Scan from hardware">
+                {ident.method === 'fingerprint' ? <Fingerprint size={16} /> : <CreditCard size={16} />}
+              </button>
+            )}
+            {identifiers.length > 1 && (
+              <button type="button" onClick={() => removeIdentifierSlot(index)} className="remove-ident-btn" title="Remove">
+                <X size={16} />
+              </button>
+            )}
+          </div>
         )}
       </div>
     </div>
@@ -222,42 +226,48 @@ const Employees = () => {
   const renderModalContent = () => {
     if (enrollStep === 'checking') {
       return (
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <RefreshCw size={40} className="pulse-icon" style={{ color: 'var(--accent-cyan)', marginBottom: '1rem' }} />
-          <h3>Checking Machine Status...</h3>
-          <p style={{ color: 'var(--text-secondary)' }}>Looking for active ESP32 connection on the network.</p>
+        <div className="modal-status-panel">
+          <RefreshCw size={40} className="pulse-icon modal-status-icon" style={{ color: 'var(--accent-cyan)' }} />
+          <h3 className="modal-status-title">Checking Machine Status...</h3>
+          <p className="modal-status-desc" style={{ marginBottom: 0 }}>
+            Looking for active ESP32 connection on the network.
+          </p>
         </div>
       );
     }
 
     if (enrollStep === 'offline') {
       return (
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Cpu size={40} style={{ color: '#ef4444', marginBottom: '1rem' }} />
-          <h3 style={{ color: '#ef4444' }}>Machine is Offline</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
+        <div className="modal-status-panel">
+          <Cpu size={40} className="modal-status-icon" style={{ color: '#ef4444' }} />
+          <h3 className="modal-status-title" style={{ color: '#ef4444' }}>Machine is Offline</h3>
+          <p className="modal-status-desc">
             Cannot connect to the machine for enrollment. You can still add employees manually.
           </p>
-          <button onClick={() => setEnrollStep('final')} style={{ background: 'var(--accent-cyan)', color: '#000', padding: '0.75rem 1.5rem', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
-            Continue Manually
-          </button>
-          <button onClick={closeModal} style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)', padding: '0.75rem 1.5rem', borderRadius: '8px', border: '1px solid var(--glass-border)', marginLeft: '0.5rem', cursor: 'pointer' }}>
-            Cancel
-          </button>
+          <div className="modal-actions">
+            <button type="button" onClick={() => setEnrollStep('final')} className="modal-btn modal-btn-primary">
+              Continue Manually
+            </button>
+            <button type="button" onClick={closeModal} className="modal-btn modal-btn-secondary">
+              Cancel
+            </button>
+          </div>
         </div>
       );
     }
 
     if (enrollStep === 'select') {
       return (
-        <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-          <h3 style={{ color: 'var(--accent-green)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <div className="modal-status-panel">
+          <h3 className="modal-status-title" style={{ color: 'var(--accent-green)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
             <CheckCircle size={20} /> Machine is Online
           </h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>You can scan from hardware or enter identifiers manually.</p>
-          <button onClick={() => setEnrollStep('final')} style={{ background: 'var(--accent-cyan)', color: '#000', padding: '0.75rem 2rem', borderRadius: '8px', fontWeight: 600, border: 'none', cursor: 'pointer', width: '100%' }}>
-            Continue to Form
-          </button>
+          <p className="modal-status-desc">You can scan from hardware or enter identifiers manually.</p>
+          <div className="modal-actions">
+            <button type="button" onClick={() => setEnrollStep('final')} className="modal-btn modal-btn-primary">
+              Continue to Form
+            </button>
+          </div>
         </div>
       );
     }
@@ -265,24 +275,26 @@ const Employees = () => {
     if (enrollStep === 'scanning') {
       const scanMethod = identifiers[enrollingIndex]?.method || 'fingerprint';
       return (
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <div className="modal-status-panel">
           {scanMethod === 'fingerprint' ? (
-            <Fingerprint size={60} className="pulse-icon" style={{ color: 'var(--accent-cyan)', margin: '0 auto 1.5rem' }} />
+            <Fingerprint size={56} className="pulse-icon modal-status-icon" style={{ color: 'var(--accent-cyan)' }} />
           ) : (
-            <CreditCard size={60} className="pulse-icon" style={{ color: 'var(--accent-green)', margin: '0 auto 1.5rem' }} />
+            <CreditCard size={56} className="pulse-icon modal-status-icon" style={{ color: 'var(--accent-green)' }} />
           )}
-          <h3 style={{ marginBottom: '1rem' }}>Waiting for Hardware...</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', fontSize: '1.1rem' }}>
+          <h3 className="modal-status-title">Waiting for Hardware...</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '0.4rem', fontSize: '1rem', fontWeight: 500 }}>
             Scanning identifier slot #{enrollingIndex + 1}
           </p>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
+          <p className="modal-status-desc">
             {scanMethod === 'fingerprint'
               ? 'Please follow the instructions on the physical machine screen to scan your finger.'
               : 'Please tap your RFID card on the physical machine now.'}
           </p>
-          <button onClick={() => setEnrollStep('final')} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '0.5rem 1.5rem', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)', cursor: 'pointer' }}>
-            Cancel Scanning
-          </button>
+          <div className="modal-actions">
+            <button type="button" onClick={() => setEnrollStep('final')} className="modal-btn modal-btn-danger">
+              Cancel Scanning
+            </button>
+          </div>
         </div>
       );
     }
@@ -314,8 +326,8 @@ const Employees = () => {
 
           <form className="register-form" onSubmit={handleManualAddOrEdit}>
             {/* Employee Name */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Employee Name</label>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.45rem', color: 'var(--text-secondary)' }}>Employee Name</label>
               <input
                 type="text"
                 placeholder="e.g. Alice Smith"
@@ -327,8 +339,8 @@ const Employees = () => {
             </div>
 
             {/* Identifiers */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem' }}>
                 <label style={{ color: 'var(--text-secondary)' }}>Identifiers (Fingerprints / RFID Cards)</label>
                 <button type="button" onClick={addIdentifierSlot} className="add-ident-btn">
                   <Plus size={14} /> Add
@@ -340,8 +352,8 @@ const Employees = () => {
             </div>
 
             {/* Shift Assignment */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Assigned Shifts</label>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.45rem', color: 'var(--text-secondary)' }}>Assigned Shifts</label>
               <div className="shift-checkboxes">
                 {shifts.map(shift => (
                   <label key={shift.id} className={`shift-checkbox ${selectedShiftIds.includes(shift.id) ? 'checked' : ''}`}>
@@ -382,7 +394,7 @@ const Employees = () => {
       </div>
 
       <div className="table-container">
-        <table className="attendance-table">
+        <table className="attendance-table employees-table">
           <thead>
             <tr>
               <th>ID</th>
@@ -448,25 +460,21 @@ const Employees = () => {
       {/* Delete Confirmation Modal */}
       {employeeToDelete && (
         <div className="modal-overlay">
-          <div className="modal-content" style={{ textAlign: 'center', maxWidth: '400px', padding: '2rem' }}>
-            <Trash2 size={48} style={{ color: '#ef4444', margin: '0 auto 1rem' }} />
-            <h3 style={{ marginBottom: '1rem' }}>Delete Employee?</h3>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-              Are you sure you want to delete <strong style={{ color: 'var(--text-primary)' }}>{employeeToDelete.name}</strong>? This will permanently remove their access and delete their biometric data from the machine.
-            </p>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <button
-                onClick={() => setEmployeeToDelete(null)}
-                style={{ flex: 1, background: 'var(--bg-secondary)', color: 'var(--text-primary)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.1)', cursor: 'pointer' }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDelete}
-                style={{ flex: 1, background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)', cursor: 'pointer', fontWeight: 600 }}
-              >
-                Delete
-              </button>
+          <div className="modal-content modal-confirm-card">
+            <div className="modal-status-panel">
+              <Trash2 size={44} className="modal-status-icon" style={{ color: '#ef4444' }} />
+              <h3 className="modal-status-title">Delete Employee?</h3>
+              <p className="modal-status-desc">
+                Are you sure you want to delete <strong style={{ color: 'var(--text-primary)' }}>{employeeToDelete.name}</strong>? This will permanently remove their access and delete their biometric data from the machine.
+              </p>
+              <div className="modal-actions">
+                <button type="button" onClick={() => setEmployeeToDelete(null)} className="modal-btn modal-btn-secondary">
+                  Cancel
+                </button>
+                <button type="button" onClick={handleDelete} className="modal-btn modal-btn-danger">
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -475,7 +483,7 @@ const Employees = () => {
       {/* Dynamic Modal Overlay */}
       {showModal && (
         <div className="modal-overlay">
-          <div className="modal-content">
+          <div className="modal-content employees-modal-content">
             <button className="close-btn" onClick={closeModal}><X size={24} /></button>
             {renderModalContent()}
           </div>

@@ -146,19 +146,21 @@ const Shifts = () => {
       {/* Delete Confirmation */}
       {shiftToDelete && (
         <div className="modal-overlay">
-          <div className="modal-content" style={{ textAlign: 'center', maxWidth: '400px', padding: '2rem' }}>
-            <Trash2 size={48} style={{ color: '#ef4444', margin: '0 auto 1rem' }} />
-            <h3 style={{ marginBottom: '1rem' }}>Delete Shift?</h3>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-              Are you sure you want to delete the <strong style={{ color: 'var(--text-primary)' }}>{shiftToDelete.title}</strong> shift? Employees assigned to this shift will be unassigned.
-            </p>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <button onClick={() => setShiftToDelete(null)} style={{ flex: 1, background: 'var(--bg-secondary)', color: 'var(--text-primary)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.1)', cursor: 'pointer' }}>
-                Cancel
-              </button>
-              <button onClick={handleDelete} style={{ flex: 1, background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)', cursor: 'pointer', fontWeight: 600 }}>
-                Delete
-              </button>
+          <div className="modal-content modal-confirm-card">
+            <div className="modal-status-panel">
+              <Trash2 size={44} className="modal-status-icon" style={{ color: '#ef4444' }} />
+              <h3 className="modal-status-title">Delete Shift?</h3>
+              <p className="modal-status-desc">
+                Are you sure you want to delete the <strong style={{ color: 'var(--text-primary)' }}>{shiftToDelete.title}</strong> shift? Employees assigned to this shift will be unassigned.
+              </p>
+              <div className="modal-actions">
+                <button type="button" onClick={() => setShiftToDelete(null)} className="modal-btn modal-btn-secondary">
+                  Cancel
+                </button>
+                <button type="button" onClick={handleDelete} className="modal-btn modal-btn-danger">
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -188,17 +190,17 @@ const Shifts = () => {
             )}
 
             <form onSubmit={handleSubmit} className="register-form">
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Shift Name</label>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.45rem', color: 'var(--text-secondary)' }}>Shift Name</label>
                 <input type="text" placeholder="e.g. Morning" value={title} onChange={(e) => setTitle(e.target.value)} required autoFocus />
               </div>
-              <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
-                <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Start Time</label>
+              <div className="shift-time-fields">
+                <div className="shift-time-field">
+                  <label style={{ display: 'block', marginBottom: '0.45rem', color: 'var(--text-secondary)' }}>Start Time</label>
                   <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
                 </div>
-                <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>End Time</label>
+                <div className="shift-time-field">
+                  <label style={{ display: 'block', marginBottom: '0.45rem', color: 'var(--text-secondary)' }}>End Time</label>
                   <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
                 </div>
               </div>

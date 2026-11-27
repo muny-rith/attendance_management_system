@@ -205,35 +205,133 @@ textarea {
     margin-top: 0.5rem;
   }
 
-  /* Mobile bottom-sheet style modal */
+  /* Mobile friendly modal dialog */
   .modal-overlay {
-    padding: 0;
-    align-items: flex-end;
+    padding: 0.75rem;
+    align-items: center;
   }
 
   .modal-content {
     margin: 0;
     width: 100%;
     max-width: 100%;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    padding: 2rem 1.5rem 2.5rem;
-    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: calc(100dvh - 1.5rem);
+    overflow-y: auto;
+    border-radius: 16px;
+    padding: 1.5rem 1.25rem;
+    animation: modalPop 0.2s ease-out;
+  }
+
+  .modal-content h2 {
+    font-size: 1.125rem;
+    padding-right: 2rem;
+  }
+
+  .close-btn {
+    top: 0.875rem;
+    right: 0.875rem;
+  }
+
+  .modal-status-panel {
+    padding: 0.35rem 0;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .modal-btn {
+    width: 100%;
+  }
+
+  .register-form input:not([type="checkbox"]):not([type="radio"]),
+  .register-form select {
+    font-size: 1rem;
   }
 }
 
-@keyframes slideUp {
-  0% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
+.register-form input:not([type="checkbox"]):not([type="radio"]),
+.register-form select {
+  width: 100%;
+  box-sizing: border-box;
+}
 
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
+/* Shared modal status & action controls across all routes */
+.modal-status-panel {
+  text-align: center;
+  padding: 0.75rem 0.25rem;
+}
+
+.modal-status-icon {
+  display: block;
+  margin: 0 auto 0.9rem;
+}
+
+.modal-status-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.modal-status-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1.35rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.modal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1.25rem;
+  min-height: 42px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex: 1;
+}
+
+.modal-btn-primary {
+  background: var(--accent-cyan);
+  color: #FFFFFF;
+  border: none;
+}
+
+.modal-btn-primary:hover {
+  background: var(--accent-cyan-hover);
+}
+
+.modal-btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  font-weight: 500;
+}
+
+.modal-btn-secondary:hover {
+  background: #F8FAFC;
+}
+
+.modal-btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.modal-btn-danger:hover {
+  background: rgba(239, 68, 68, 0.16);
 }
 
 /* ============================================
@@ -354,8 +452,9 @@ textarea {
 
   .identifier-row-fields .remove-ident-btn,
   .identifier-row-fields .scan-hw-btn {
-    width: 100%;
-    height: 32px;
+    flex: 1;
+    width: auto;
+    height: 36px;
   }
 
   .shift-cards {

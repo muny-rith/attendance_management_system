@@ -214,16 +214,15 @@
   flex-wrap: nowrap;
 }
 
-.ident-method-select {
-  /* width: ; */
-  /* min-width: 100px; */
+.identifier-row-fields .ident-method-select {
+  width: auto;
   flex-shrink: 0;
   padding: 0.5rem !important;
   font-size: 0.8rem !important;
-  /* align-self: flex-start; */
 }
 
-.ident-value-input {
+.identifier-row-fields .ident-value-input {
+  width: auto;
   flex: 1.5;
   min-width: 80px;
   padding: 0.5rem !important;
@@ -231,7 +230,8 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-.ident-label-input {
+.identifier-row-fields .ident-label-input {
+  width: auto;
   flex: 1;
   min-width: 60px;
   padding: 0.5rem !important;
@@ -346,6 +346,68 @@
   color: #93C5FD;
 }
 
-.employee-manager .modal-content {
+.employee-manager .modal-content,
+.employees-modal-content {
   max-width: 520px;
+}
+
+.modal-confirm-card {
+  max-width: 400px !important;
+}
+
+.ident-row-actions {
+  display: flex;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .add-btn {
+    padding: 0 0.9rem;
+    height: 34px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .employees-modal-content,
+  .modal-confirm-card {
+    max-width: 100% !important;
+  }
+
+  .employees-table {
+    table-layout: auto;
+  }
+
+  .employees-table th:nth-child(2),
+  .employees-table td:nth-child(2) {
+    width: auto !important;
+  }
+
+  .employees-table th:nth-child(5),
+  .employees-table td:nth-child(5) {
+    width: 96px !important;
+    text-align: right;
+  }
+
+  .action-cells {
+    justify-content: flex-end;
+  }
+
+  .identifier-row-fields .ident-method-select,
+  .identifier-row-fields .ident-value-input,
+  .identifier-row-fields .ident-label-input {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .ident-row-actions {
+    width: 100%;
+  }
+
+  .ident-row-actions .scan-hw-btn,
+  .ident-row-actions .remove-ident-btn {
+    flex: 1;
+    width: auto;
+    height: 36px;
+  }
 }

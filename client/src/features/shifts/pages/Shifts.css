@@ -51,9 +51,38 @@
 /* Shift Definitions Redesign (Clean & Accessible) */
 .shift-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: 2rem;
   padding: 1rem 0 2rem;
+}
+
+.shift-time-fields {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.shift-time-field {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .shift-grid {
+    gap: 1rem;
+    padding: 0.5rem 0 1.25rem;
+  }
+
+  .shift-clean-card {
+    min-height: 170px;
+    padding: 1.25rem;
+  }
+
+  .shift-time-fields {
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 0;
+  }
 }
 
 .shift-clean-card {
