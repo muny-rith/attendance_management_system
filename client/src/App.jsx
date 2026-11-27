@@ -5,6 +5,7 @@ import MainLayout from './layouts/MainLayout/MainLayout';
 import AttendanceLogs from './pages/AttendanceLogs';
 import Employees from './pages/Employees';
 import Shifts from './pages/Shifts';
+import NotFound from './pages/NotFound';
 import './index.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             <Route path="/logs" element={<AttendanceLogs />} />
             <Route path="/employees" element={<Employees />} />
             <Route path="/shifts" element={<Shifts />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </Router>

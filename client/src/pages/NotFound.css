@@ -1,0 +1,128 @@
+.not-found-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 140px);
+  padding: 1rem 0;
+}
+
+.not-found-card {
+  width: 100%;
+  max-width: 500px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+}
+
+.not-found-icon-wrap {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1.25rem;
+  border-radius: 18px;
+  background: var(--primary-subtle);
+  border: 1px solid var(--primary-border);
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: var(--primary-subtle);
+  border: 1px solid var(--primary-border);
+  color: var(--accent-cyan);
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.875rem;
+}
+
+.not-found-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.625rem;
+}
+
+.not-found-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 1.75rem;
+  word-break: break-word;
+}
+
+.not-found-path {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 6px;
+  background: #f3f4f6;
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+.not-found-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.not-found-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.not-found-btn--primary {
+  background: var(--accent-cyan);
+  color: #ffffff;
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
+}
+
+.not-found-btn--primary:hover {
+  background: var(--accent-cyan-hover);
+}
+
+.not-found-btn--secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.not-found-btn--secondary:hover {
+  background: #f9fafb;
+  border-color: #cbd5e1;
+}
+
+@media (max-width: 768px) {
+  .not-found-card {
+    padding: 2rem 1.25rem;
+  }
+
+  .not-found-actions {
+    flex-direction: column;
+  }
+
+  .not-found-btn {
+    width: 100%;
+  }
+}

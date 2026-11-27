@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './MonthlyGrid.css';
 import { fetchMonthlyGrid } from '../../services/attendanceApi';
-import { Download, ChevronLeft, ChevronRight } from 'lucide-react';
+import { exportMonthlyMatrixToExcel } from '../../utils/exportMonthlyExcel';
+import { printMonthlyMatrixA4 } from '../../utils/printMonthlyA4';
+import { Download, Printer, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function MonthlyGrid() {
   const currentDate = new Date();
@@ -9,6 +11,8 @@ export default function MonthlyGrid() {
   const [month, setMonth] = useState(currentDate.getMonth() + 1);
   const [gridData, setGridData] = useState({ daysInMonth: 30, matrix: [] });
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
+  const [printing, setPrinting] = useState(false);
 
   const loadGrid = useCallback(async () => {
     setLoading(true);
@@ -55,58 +59,40 @@ export default function MonthlyGrid() {
 
   const getHoliday = (dayNum) => gridData.holidays && gridData.holidays[dayNum];
 
-  const handleExportMatrixCSV = () => {
+  const handleExportExcel = async () => {
+    if (exporting || printing) return;
     if (!gridData.matrix || gridData.matrix.length === 0) {
       alert('No monthly attendance data to export.');
       return;
     }
 
-    const header = [
-      'Staff Name',
-      'Role',
-      ...daysArray.map((d) => `Day ${d}`),
-      'Late Days',
-      'Absent Days',
-      'Present Days',
-    ];
+    try {
+      setExporting(true);
+      await exportMonthlyMatrixToExcel({ year, month, gridData });
+    } catch (error) {
+      console.error('Excel export failed:', error);
+      alert('Failed to export Excel file. Please try again.');
+    } finally {
+      setExporting(false);
+    }
+  };
 
-    const rows = [header.join(',')];
+  const handlePrintA4 = async () => {
+    if (printing || exporting) return;
+    if (!gridData.matrix || gridData.matrix.length === 0) {
+      alert('No monthly attendance data to print.');
+      return;
+    }
 
-    gridData.matrix.forEach((emp) => {
-      const absentCount =
-        emp.absentDays !== undefined
-          ? emp.absentDays
-          : Object.values(emp.daysData || {}).filter((d) => d.status === 'ABSENT').length;
-
-      const row = [
-        `"${emp.employeeName}"`,
-        `"${emp.role || 'teacher'}"`,
-        ...daysArray.map((d) => {
-          const dayInfo = emp.daysData && emp.daysData[d];
-          if (!dayInfo) return '""';
-          if (dayInfo.status === 'WEEKEND') return '"W"';
-          if (dayInfo.status === 'HOLIDAY') return '"H"';
-          if (dayInfo.status === 'PRESENT') return '"P"';
-          if (dayInfo.status === 'LATE') return '"L"';
-          if (dayInfo.status === 'ABSENT') return '"A"';
-          return '"-"';
-        }),
-        emp.lateDays || 0,
-        `${absentCount}d`,
-        emp.presentDays || 0,
-      ];
-      rows.push(row.join(','));
-    });
-
-    const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `monthly_attendance_matrix_${year}_${String(month).padStart(2, '0')}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    try {
+      setPrinting(true);
+      await printMonthlyMatrixA4({ year, month, gridData });
+    } catch (error) {
+      console.error('A4 print failed:', error);
+      alert('Failed to prepare A4 print view. Please try again.');
+    } finally {
+      setPrinting(false);
+    }
   };
 
   const monthNames = [
@@ -144,14 +130,30 @@ export default function MonthlyGrid() {
           <span><span className="dot dot-p" /> P (Present)</span>
           <span><span className="dot dot-l" /> L (Late)</span>
           <span><span className="dot dot-a" /> A (Absent)</span>
-          <span><span className="dot dot-w" /> W (Weekend)</span>
           <span><span className="dot dot-h" /> H (Holiday)</span>
         </div>
 
-        <button type="button" onClick={handleExportMatrixCSV} className="btn-export-matrix">
-          <Download size={14} />
-          <span>Export CSV</span>
-        </button>
+        <div className="monthly-toolbar-actions">
+          <button
+            type="button"
+            onClick={handlePrintA4}
+            className="btn-print-matrix"
+            disabled={printing || exporting || loading || !gridData.matrix?.length}
+            title="Print or Save as true A4 Landscape PDF"
+          >
+            <Printer size={14} />
+            <span>{printing ? 'Preparing...' : 'Print'}</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleExportExcel}
+            className="btn-export-matrix"
+            disabled={exporting || printing || loading || !gridData.matrix?.length}
+          >
+            <Download size={14} />
+            <span>{exporting ? 'Exporting...' : 'Export'}</span>
+          </button>
+        </div>
       </div>
 
       {/* Table Container */}
@@ -206,8 +208,8 @@ export default function MonthlyGrid() {
                             dayInfo && dayInfo.times
                               ? `${emp.employeeName} (Day ${dayNum}): ${dayInfo.times}`
                               : holiday
-                              ? `${holiday.name}: ${status}`
-                              : `${emp.employeeName} (Day ${dayNum}): ${status}`
+                                ? `${holiday.name}: ${status}`
+                                : `${emp.employeeName} (Day ${dayNum}): ${status}`
                           }
                         >
                           {status === 'PRESENT' && <span className="m-tag tag-p">P</span>}

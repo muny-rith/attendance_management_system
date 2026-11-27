@@ -52,7 +52,7 @@
   color: var(--text-secondary);
 }
 
-.matrix-legend-compact > span {
+.matrix-legend-compact>span {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
@@ -78,15 +78,18 @@
   background: #EF4444;
 }
 
-.dot-w {
-  background: #D1D5DB;
-}
-
 .dot-h {
   background: #6366F1;
 }
 
-.btn-export-matrix {
+.monthly-toolbar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.btn-export-matrix,
+.btn-print-matrix {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -101,8 +104,15 @@
   cursor: pointer;
 }
 
-.btn-export-matrix:hover {
+.btn-export-matrix:hover:not(:disabled),
+.btn-print-matrix:hover:not(:disabled) {
   background: #F8FAFC;
+}
+
+.btn-export-matrix:disabled,
+.btn-print-matrix:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Matrix Table Specifics (Full month, zero column squishing, smooth horizontal scroll) */
@@ -281,8 +291,12 @@
     font-size: 0.8125rem;
   }
 
-  .btn-export-matrix {
+  .monthly-toolbar-actions {
     order: 2;
+  }
+
+  .btn-export-matrix,
+  .btn-print-matrix {
     padding: 0.3rem 0.55rem;
     font-size: 0.75rem;
   }
